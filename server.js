@@ -7,6 +7,7 @@ import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 // import prefresh from '@prefresh/vite'
 import EnvironmentPlugin from 'vite-plugin-environment'
 
+// TODO: better relative paths than this (this is assuming we're in node_modules)
 import truffleConfig from '../../truffle.config.js'
 
 const app = express()
@@ -29,7 +30,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { LegacyContext } from '@spore/platform'
 
-import Page from '..${req.url}/index.jsx'
+import Page from '../../${req.url}/index.jsx'
 
 if (import.meta.hot) {
   // Vite HMR code
