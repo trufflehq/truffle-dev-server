@@ -30,7 +30,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { LegacyContext } from '@spore/platform'
 
-import Page from '../../${req.url}/index.jsx'
+import Page from '../${req.url}/index.jsx'
 
 if (import.meta.hot) {
   // Vite HMR code
