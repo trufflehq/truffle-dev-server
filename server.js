@@ -95,7 +95,6 @@ render(<LegacyContext><Page /></LegacyContext>, document.getElementById('root'))
     }
   </script>
   <script type="module" src="http://localhost:3001/build/index.jsx"></script>
-  </script>
 </body>
 </html>
 `
