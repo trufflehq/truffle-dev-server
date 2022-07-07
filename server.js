@@ -1,9 +1,11 @@
 import express from "express";
 import { createServer as createViteServer } from "vite";
 
+const PORT = 3000;
+
 const vite = await createViteServer({
   appType: "custom",
-  ssr: { external: ['fast-glob'] }, // errors w/o this
+  ssr: { external: ['glob'] }, // errors w/o this
   server: {
     middlewareMode: true,
     // FIXME: I think we might be able to disable when this package is installed via hosted github
@@ -16,6 +18,7 @@ const app = express();
 app.use(vite.middlewares)
 app.use('*', async (req, res, next) => {
   const url = req.originalUrl
+  console.log(`Loading ${url}`)
 
   try {
     // vite doesn't like file urls :(
@@ -31,4 +34,4 @@ app.use('*', async (req, res, next) => {
     next(e)
   }
 });
-app.listen(3000);
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));

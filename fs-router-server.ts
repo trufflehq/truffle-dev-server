@@ -1,5 +1,5 @@
 import fs from "fs";
-import fg from "fast-glob";
+import fg from "glob";
 // import { existsSync } from "https://deno.land/std@0.144.0/fs/mod.ts";
 // import glob from "https://npm.tfl.dev/glob@8";
 
