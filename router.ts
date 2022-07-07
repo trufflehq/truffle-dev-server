@@ -14,22 +14,19 @@ export function addRouteAction(route) {
 // create a dom node and reuse existing dom nodes for layouts
 async function clientAction(context) {
   const { path, params, route } = context;
-
-  console.log("check", route);
-
   const childElement = await context.next();
 
   let pageElement;
   // pages can't have children
   if (!childElement && route.page) {
-    const pageElementName = (await import(route.page.replace(".", "")))
+    const pageElementName = (await import(/* @vite-ignore */route.page.replace(".", "")))
       ?.default;
     return document.createElement(pageElementName);
   }
 
   let layoutElement;
   if (route.layout) {
-    const layoutElementName = (await import(route.layout.replace(".", "")))
+    const layoutElementName = (await import(/* @vite-ignore */route.layout.replace(".", "")))
       ?.default;
 
     // reuse existing layout, if there is one
@@ -61,13 +58,13 @@ async function ssrAction(context) {
 
   let layoutElementName;
   if (route.layout) {
-    layoutElementName = (await import(route.layout.replace(".", "")))?.default;
+    layoutElementName = (await import(/* @vite-ignore */route.layout.replace(".", "")))?.default;
     template += `<${layoutElementName} id="layout-${route.fullPath}">`;
   }
 
   let pageElementName;
   if (route.page) {
-    pageElementName = (await import(route.page.replace(".", "")))?.default;
+    pageElementName = (await import(/* @vite-ignore */route.page.replace(".", "")))?.default;
     template += `<${pageElementName}>`;
   }
 

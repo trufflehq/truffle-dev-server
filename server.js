@@ -21,7 +21,6 @@ app.use('*', async (req, res, next) => {
     const entry = (await import.meta.resolve("./server-entry.ts")).toString().replace('file://', '')
     const { render } = await vite.ssrLoadModule(entry);
     const appHtml = await render(url);
-    console.log('apphtml', appHtml)
     const html = await vite.transformIndexHtml(url, appHtml);
     res.status(200).set({ "Content-Type": "text/html" }).end(html);
   } catch (e) {

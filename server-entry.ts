@@ -24,11 +24,7 @@ globalContext._PRIVATE_setInstance(new AsyncLocalStorage());
 export function render(url) {
   return new Promise((resolve) => {
     globalContext.run({}, async () => {
-      console.log("run");
-
       const baseHtml = await getBaseHtml(url);
-      console.log("base", baseHtml);
-
       try {
         const result = templateRenderer.render(baseHtml, {
           ...defaultRenderInfo,
@@ -55,7 +51,7 @@ async function getBaseHtml(url) {
     const router = getRouter();
     componentTemplate = await router.resolve(url);
   } catch (err) {
-    console.log("err", err);
+    console.log("Base HTML error", err);
     componentTemplate = "";
   }
 

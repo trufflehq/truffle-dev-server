@@ -1,5 +1,5 @@
 import fs from "fs";
-import glob from "glob";
+import fg from "fast-glob";
 // import { existsSync } from "https://deno.land/std@0.144.0/fs/mod.ts";
 // import glob from "https://npm.tfl.dev/glob@8";
 
@@ -13,7 +13,7 @@ const routes = getRoutes();
 export const nestedRoutes = getNestedRoutes();
 
 function getRoutes() {
-  return glob
+  return fg
     // only match directories
     .sync(`**/*/`, { cwd: dir })
     .map((route) => `/${route.substr(0, route.length - 1)}`); // get rid of trailing slash
