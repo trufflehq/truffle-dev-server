@@ -2,7 +2,7 @@
   "name": "truffle-dev-server",
   "version": "1.0.0",
   "description": "Until we get better dev platform support on Deno...",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "dev": "node --experimental-import-meta-resolve --experimental-network-imports ./server.js"
