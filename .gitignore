@@ -1,4 +1,1 @@
-/node_modules
-/build
-spore.secret.json
-truffle.secret.js
+node_modules

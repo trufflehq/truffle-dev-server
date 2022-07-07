@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "deno.ns",
+      "dom"
+    ]
+  },
+  "fmt": {
+    "options": {
+      "lineWidth": 100
+    }
+  }
+}
