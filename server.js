@@ -3,6 +3,7 @@ import { createServer as createViteServer } from "vite";
 
 const vite = await createViteServer({
   appType: "custom",
+  ssr: { external: ['fast-glob'] }, // errors w/o this
   server: {
     middlewareMode: true,
     // FIXME: I think we might be able to disable when this package is installed via hosted github
