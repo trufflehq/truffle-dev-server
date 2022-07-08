@@ -19,25 +19,25 @@ async function clientAction(context) {
   let pageElement;
   // pages can't have children
   if (!childElement && route.page) {
-    const pageElementName = (await import(/* @vite-ignore */route.page.replace(".", "")))
+    const pageWc = (await import(/* @vite-ignore */route.page.replace(".", "")))
       ?.default;
-    return document.createElement(pageElementName);
+    return document.createElement(pageWc.tagName);
   }
 
   let layoutElement;
   if (route.layout) {
-    const layoutElementName = (await import(/* @vite-ignore */route.layout.replace(".", "")))
+    const layoutWc = (await import(/* @vite-ignore */route.layout.replace(".", "")))
       ?.default;
 
     // reuse existing layout, if there is one
     const existingLayoutElement = document.querySelector(
-      `${layoutElementName}#${CSS.escape(route.fullPath)}`,
+      `${layoutWc.tagName}#${CSS.escape(route.fullPath)}`,
     );
     // FIXME: cannot update unmounted root
     // FIXME: would need to update existing layout's children
     // replaceChildren doesn't seem to work properly
     layoutElement = existingLayoutElement ||
-      document.createElement(layoutElementName);
+      document.createElement(layoutWc.tagName);
     layoutElement.id = route.fullPath;
 
     if (pageElement) {
@@ -56,16 +56,16 @@ async function ssrAction(context) {
   const { path, params, route } = context;
   let template = ``;
 
-  let layoutElementName;
+  let layoutWc;
   if (route.layout) {
-    layoutElementName = (await import(/* @vite-ignore */route.layout.replace(".", "")))?.default;
-    template += `<${layoutElementName} id="layout-${route.fullPath}">`;
+    layoutWc = (await import(/* @vite-ignore */route.layout.replace(".", "")))?.default;
+    template += `<${layoutWc.tagName} id="layout-${route.fullPath}">`;
   }
 
-  let pageElementName;
+  let pageWc;
   if (route.page) {
-    pageElementName = (await import(/* @vite-ignore */route.page.replace(".", "")))?.default;
-    template += `<${pageElementName}>`;
+    pageWc = (await import(/* @vite-ignore */route.page.replace(".", "")))?.default;
+    template += `<${pageWc.tagName}>`;
   }
 
   const child = await context.next();
@@ -73,12 +73,12 @@ async function ssrAction(context) {
     template += child;
   }
 
-  if (pageElementName) {
-    template += `</${pageElementName}>`;
+  if (pageWc) {
+    template += `</${pageWc.tagName}>`;
   }
 
-  if (layoutElementName) {
-    template += `</${layoutElementName}>`;
+  if (layoutWc) {
+    template += `</${layoutWc.tagName}>`;
   }
 
   return template || null;

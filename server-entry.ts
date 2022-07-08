@@ -13,7 +13,7 @@ import { AsyncLocalStorage } from "node:async_hooks";
 import {
   getRouter,
   setRoutes,
-} from "https://tfl.dev/@truffle/router@1.0.0/router.js";
+} from "https://tfl.dev/@truffle/router@1.0.0/index.js";
 import { addRouteAction } from "./router.ts";
 
 const { templateRenderer, defaultRenderInfo, elementRenderer } = fastSSR();
