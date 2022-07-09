@@ -16,36 +16,22 @@ async function clientAction(context) {
   const { path, params, route } = context;
   const childElement = await context.next();
 
-  let pageElement;
-  // pages can't have children
-  if (!childElement && route.page) {
-    const pageWc = (await import(/* @vite-ignore */route.page.replace(".", "")))
-      ?.default;
-    return document.createElement(pageWc.tagName);
-  }
-
-  let layoutElement;
-  if (route.layout) {
-    const layoutWc = (await import(/* @vite-ignore */route.layout.replace(".", "")))
-      ?.default;
+  let wcElement;
+  if (route.moduleUrl) {
+    const { default: wc } = await import(/* @vite-ignore */route.moduleUrl.replace(".", "")) || {}
 
     // reuse existing layout, if there is one
     const existingLayoutElement = document.querySelector(
-      `${layoutWc.tagName}#${CSS.escape(route.fullPath)}`,
+      `${wc.tagName}#${getDomId(route)}`,
     );
-    // FIXME: cannot update unmounted root
-    // FIXME: would need to update existing layout's children
-    // replaceChildren doesn't seem to work properly
-    layoutElement = existingLayoutElement ||
-      document.createElement(layoutWc.tagName);
-    layoutElement.id = route.fullPath;
+    wcElement = existingLayoutElement ||
+      document.createElement(wc.tagName);
+    wcElement.id = getDomId(route);
 
-    if (pageElement) {
-      layoutElement.replaceChildren(pageElement);
-    } else if (childElement) {
-      layoutElement.replaceChildren(childElement);
+    if (childElement) {
+      wcElement.replaceChildren(childElement);
     }
-    return layoutElement;
+    return wcElement;
   }
 
   return childElement;
@@ -56,16 +42,10 @@ async function ssrAction(context) {
   const { path, params, route } = context;
   let template = ``;
 
-  let layoutWc;
-  if (route.layout) {
-    layoutWc = (await import(/* @vite-ignore */route.layout.replace(".", "")))?.default;
-    template += `<${layoutWc.tagName} id="layout-${route.fullPath}">`;
-  }
-
-  let pageWc;
-  if (route.page) {
-    pageWc = (await import(/* @vite-ignore */route.page.replace(".", "")))?.default;
-    template += `<${pageWc.tagName}>`;
+  let wc;
+  if (route.moduleUrl) {
+    wc = (await import(/* @vite-ignore */route.moduleUrl.replace(".", "")))?.default;
+    template += `<${wc.tagName} id="${getDomId(route)}">`;
   }
 
   const child = await context.next();
@@ -73,13 +53,21 @@ async function ssrAction(context) {
     template += child;
   }
 
-  if (pageWc) {
-    template += `</${pageWc.tagName}>`;
-  }
-
-  if (layoutWc) {
-    template += `</${layoutWc.tagName}>`;
+  if (wc) {
+    template += `</${wc.tagName}>`;
   }
 
   return template || null;
+}
+
+function kebabCase(str: string): string {
+  return (
+    str.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g) || []
+  )
+    .join("-")
+    .toLowerCase();
+}
+
+function getDomId(route) {
+  return `module-${kebabCase(route.fullPath)}`
 }

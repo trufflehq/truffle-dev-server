@@ -3,6 +3,8 @@ import fastSSR from "https://npm.tfl.dev/@microsoft/fast-ssr";
 import { html } from "https://npm.tfl.dev/@microsoft/fast-element@beta";
 import globalContext from "https://tfl.dev/@truffle/global-context@1.0.0/index.js";
 import { AsyncLocalStorage } from "node:async_hooks";
+// NOTE: importing cjs will fail in this file (eg express for types)
+
 // import { html, unsafeStatic } from "https://npm.tfl.dev/lit-html@2/static";
 
 // fails with Cannot access 'LitElementRenderer' before initialization in node_modules/@lit-labs/ssr/lib/render-lit-html.js
@@ -21,12 +23,13 @@ const { templateRenderer, defaultRenderInfo, elementRenderer } = fastSSR();
 // url imports can't import non-url imports, so we have to pass this in...
 globalContext._PRIVATE_setInstance(new AsyncLocalStorage());
 
-export function render(url) {
+export function render(req, res) {
+  const url = req.originalUrl
   return new Promise((resolve) => {
-    globalContext.run({}, async () => {
-      const baseHtml = await getBaseHtml(url);
+    globalContext.run({ ssr: { req, res } }, async () => {
+      const html = await getHtml(url);
       try {
-        const result = templateRenderer.render(baseHtml, {
+        const result = templateRenderer.render(html, {
           ...defaultRenderInfo,
           // elementRenderers: [elementRenderer, LitElementRenderer],
         });
@@ -37,17 +40,18 @@ export function render(url) {
         resolve(htmlStr);
       } catch (err) {
         console.error("Render error", err);
-        resolve(baseHtml);
+        resolve(html);
       }
     });
   });
 }
 
-async function getBaseHtml(url) {
-  let componentTemplate, nestedRoutes;
-  try {
-    ({ nestedRoutes } = await import("./fs-router-server.ts"));
-    setRoutes(addRouteAction(nestedRoutes));
+async function getHtml(url: string) {
+  let componentTemplate;
+  const routes = await getRoutes()
+  console.log('routes', routes);
+  try {    
+    setRoutes(addRouteAction(routes));
     const router = getRouter();
     componentTemplate = await router.resolve(url);
   } catch (err) {
@@ -64,7 +68,7 @@ async function getBaseHtml(url) {
     import.meta.url,
   )
     .toString()
-    .replace("file://", "");
+    .replace("file://", "");  
 
   return html`<!DOCTYPE html>
     <html lang="en">
@@ -76,7 +80,14 @@ async function getBaseHtml(url) {
       ${themeTemplate}
       <div id="root">${componentTemplate}</div>
       <script type="module" src="${clientEntrySrc}"></script>
-      <script>window._truffleRoutes = ${JSON.stringify(nestedRoutes)};</script>
+      <script>window._truffleRoutes = ${JSON.stringify(routes)};</script>
     </body>
     </html>`;
+  
+}
+
+async function getRoutes() {
+  // TODO: dev server, use fs-router, prod use db-router
+  const { getRoutes: getFsRoutes } = await import("./fs-router.ts");
+  return getFsRoutes()
 }

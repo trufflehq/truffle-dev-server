@@ -26,7 +26,7 @@ export async function startServer() {
       // vite doesn't like file urls :(
       const entry = (await import.meta.resolve("./server-entry.ts")).toString().replace('file://', '')
       const { render } = await vite.ssrLoadModule(entry);
-      const appHtml = await render(url);
+      const appHtml = await render(req, res);
       const html = await vite.transformIndexHtml(url, appHtml);
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {

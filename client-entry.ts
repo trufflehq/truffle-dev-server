@@ -9,6 +9,8 @@ import { addRouteAction } from "./router.ts";
 globalContext.setGlobalValue({});
 
 const routesWithActions = [addRouteAction(window._truffleRoutes)];
+console.log('r', routesWithActions);
+
 setRoutes(routesWithActions);
 const router = getRouter();
 
