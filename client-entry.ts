@@ -6,7 +6,7 @@ import {
 import { listen } from "https://tfl.dev/@truffle/router@1.0.0/history.js";
 import { addRouteAction } from "./router.ts";
 
-globalContext.setGlobalValue({});
+globalContext.setGlobalValue(window._truffleInitialContext || {});
 
 const routesWithActions = window._truffleInitialContext.routes.map(
   addRouteAction,

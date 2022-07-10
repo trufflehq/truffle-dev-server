@@ -15,7 +15,9 @@ export const serverConfig = {
 };
 
 // NOTE: this gets sent to client. needs to be public data and JSON.stringify-able
-export async function getInitialClientContext(req, res, options) {
+export async function getInitialClientContext(
+  { req, res, options, clientConfig },
+) {
   const context = globalContext.getStore();
   const { getDomain, getNestedRoutes } = await import(
     process.env.NODE_ENV === "development"
@@ -35,6 +37,7 @@ export async function getInitialClientContext(req, res, options) {
   return {
     domain,
     routes,
+    config: clientConfig,
     ...nowServerContext,
   };
 }

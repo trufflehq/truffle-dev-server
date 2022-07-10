@@ -42,11 +42,12 @@ export function render(req, res, options) {
       // context technically needs to be set to empty object before this is called
       let initialClientContext;
       try {
-        initialClientContext = await getInitialClientContext(
+        initialClientContext = await getInitialClientContext({
           req,
           res,
           options,
-        );
+          clientConfig,
+        });
         Object.assign(context, initialClientContext);
       } catch (err) {
         console.error("Initial context error", err);
