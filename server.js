@@ -3,7 +3,7 @@
 import express from "express";
 import { createServer as createViteServer } from "vite";
 
-const PORT = 8000;
+const PORT = process.env.SPOROCARP_PORT || 8000;
 
 // truffle-cli passes in { packageVersion } (for getting org, etc... with setup.lcal)
 export async function startServer(options) {
