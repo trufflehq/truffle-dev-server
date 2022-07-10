@@ -9,8 +9,9 @@ const GET_DOMAIN_QUERY = gql`query DomainByDomainName($domainName: String) {
 }`;
 
 export async function getDomain(req) {
-  const domainName = process.env.SPOROCARP_HOST ||
-    req.headers["x-forwarded-host"] || req.headers.host;
+  const domainName = process.env.HOST_OVERRIDE ||
+    req.headers["x-forwarded-host"] || req.headers.host ||
+    process.env.SPOROCARP_HOST;
 
   const client = getClient();
   const domainResponse = await client
