@@ -1,9 +1,12 @@
+// ideally this file stays as pure js so we don't have to compile.
+// vite handles compiling all other files
 import express from "express";
 import { createServer as createViteServer } from "vite";
 
-const PORT = 3000;
+const PORT = 8000;
 
-export async function startServer() {
+// truffle-cli passes in { packageVersion } (for getting org, etc... with setup.lcal)
+export async function startServer(options) {
   const vite = await createViteServer({
     appType: "custom",
     logLevel: "silent",
@@ -26,7 +29,7 @@ export async function startServer() {
       // vite doesn't like file urls :(
       const entry = (await import.meta.resolve("./server-entry.ts")).toString().replace('file://', '')
       const { render } = await vite.ssrLoadModule(entry);
-      const appHtml = await render(req, res);
+      const appHtml = await render(req, res, options);
       const html = await vite.transformIndexHtml(url, appHtml);
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {
@@ -37,4 +40,18 @@ export async function startServer() {
     }
   });
   app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+  listenForExit()
+}
+
+function listenForExit () {
+  ['exit', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException', 'SIGTERM'].forEach((eventType) => {
+    process.on(eventType, onExit.bind(null, { eventType }))
+  })
+}
+
+function onExit ({ eventType }, err) {
+  if (eventType === 'uncaughtException') {
+    return console.error('uncaughtException', err)
+  }
+  process.exit()
 }

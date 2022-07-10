@@ -10,58 +10,72 @@ const WILDCARD_PATH_NOT_EMPTY = "(.+)";
 // const WILDCARD_PATH = "(.+)";
 const DIR = "./routes";
 
-type Route = {
-  fullPath: string,
-  path: string,
-  moduleUrl: string,
-  depth: number,
-  children: Route[],
-}
+type NestedRoute = {
+  fullPath: string;
+  path: string;
+  moduleUrl: string;
+  depth: number;
+  children: NestedRoute[];
+};
 
-function getRouteFilenames() {
+type Route = {
+  path: string;
+  filename: string;
+};
+
+function getRoutes() {
   return fg
     // only match directories
     .sync(`**/*/`, { cwd: DIR })
-    .map((route: string) => `/${route.substr(0, route.length - 1)}`); // get rid of trailing slash
+    .map((filename: string) => ({
+      filename,
+      path: `/${filename.substr(0, filename.length - 1)}` // get rid of trailing slash
+        // nextjs style catch alls `[...slug]`. dir names can't be * on windows
+        // TODO: support the difference between [[...slug]] and [...slug]
+        // https://nextjs.org/docs/routing/dynamic-routes#optional-catch-all-routes)
+        .replace(/\[?\[\.\.\.(.*?)\]\]?/g, WILDCARD_PATH)
+        // /abc/[param] -> /abc/:param
+        .replace(/\[(.*?)\]/g, ":$1"),
+    }));
 }
 
-export function getRoutes(path = "", parentPath = ""): Route {
-  const routeFilenames = getRouteFilenames();
+export function getNestedRoutes() {
+  return [getNestedRoute()];
+}
+
+function getNestedRoute(
+  { route, path = "", parentPath = "" } = {},
+): NestedRoute {
+  const routes = getRoutes();
 
   const depth = path.match(/\//g)?.length || 0;
 
-  const pageModuleUrl = existsSync(`${DIR}${path}/page.tsx`) &&
-    `${DIR}${path}/page.tsx`;
-  const layoutModuleUrl = existsSync(`${DIR}${path}/layout.tsx`) &&
-    `${DIR}${path}/layout.tsx`;
+  const pageModuleUrl = existsSync(`${DIR}/${route?.filename || ""}page.tsx`) &&
+    `${DIR}/${route?.filename || ""}page.tsx`;
+  const layoutModuleUrl =
+    existsSync(`${DIR}/${route?.filename || ""}layout.tsx`) &&
+    `${DIR}/${route?.filename || ""}layout.tsx`;
 
-  // nextjs style catch alls `[...slug]`. dir names can't be * on windows
-  // TODO: support the difference between [[...slug]] and [...slug]
-  // https://nextjs.org/docs/routing/dynamic-routes#optional-catch-all-routes)
-  path = path.replace(/\[?\[\.\.\.(.*?)\]\]?/, WILDCARD_PATH);
-  // /abc/[param] -> /abc/:param
-  path = path.replace(/\[(.*?)\]/, ":$1");
-
-  const children = getChildren({ routeFilenames, path, depth })
+  const children = getChildren({ routes, parentPath: path, depth });
 
   if (pageModuleUrl) {
     // top-level page within the layout (we always have a layout route)
-    const wildcardRouteIndex = children.findIndex(({ path }) => path === `/${WILDCARD_PATH}`);
-    console.log('wc', wildcardRouteIndex);
-    
-    const hasWildcard = wildcardRouteIndex !== -1
+    const wildcardRouteIndex = children.findIndex(({ path }) =>
+      path === `/${WILDCARD_PATH}`
+    );
+    const hasWildcard = wildcardRouteIndex !== -1;
     if (hasWildcard) {
       // need to change the wildcard path from (.*) to (.+), otherwise
       // "" and (.*) behave the same
-      children[wildcardRouteIndex].path = `/${WILDCARD_PATH_NOT_EMPTY}`
+      children[wildcardRouteIndex].path = `/${WILDCARD_PATH_NOT_EMPTY}`;
     }
     children.push({
       fullPath: path,
       path: "",
       moduleUrl: pageModuleUrl,
       depth,
-      children: [] // pages can't have children
-    })
+      children: [], // pages can't have children
+    });
   }
 
   // consider this the layout
@@ -70,19 +84,27 @@ export function getRoutes(path = "", parentPath = ""): Route {
     path: path?.replace(parentPath, "") || "",
     moduleUrl: layoutModuleUrl, // can be empty
     depth,
-    children: children
-  }
+    children: children,
+  };
 }
 
-function getChildren ({ routeFilenames, path, depth }: { routeFilenames: string[], path: string, depth: number }): Route[] {
-  return routeFilenames
-    .filter((childRoute: string) => {
-      const childDepth = childRoute.match(/\//g)?.length;
+function getChildren(
+  { routes, parentPath, depth }: {
+    routes: Route[];
+    parentPath: string;
+    depth: number;
+  },
+): NestedRoute[] {
+  return routes
+    .filter((childRoute: Route) => {
+      const childDepth = childRoute.path.match(/\//g)?.length;
       const isNextDepth = childDepth === depth + 1;
-      const isSubroute = childRoute.indexOf(path) !== -1;
+      const isSubroute = childRoute.path.indexOf(parentPath) !== -1;
       return isNextDepth && isSubroute;
     })
-    .map((childRoute: string) => getRoutes(childRoute, path))
+    .map((childRoute: Route) =>
+      getNestedRoute({ route: childRoute, path: childRoute.path, parentPath })
+    )
     // wildcard at end
-    .sort((a, b) => a.path === `/${WILDCARD_PATH}` ? 1 : -1)
+    .sort((a, b) => a.path === `/${WILDCARD_PATH}` ? 1 : -1);
 }

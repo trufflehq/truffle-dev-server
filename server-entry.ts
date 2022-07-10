@@ -17,17 +17,37 @@ import {
   setRoutes,
 } from "https://tfl.dev/@truffle/router@1.0.0/index.js";
 import { addRouteAction } from "./router.ts";
+import {
+  clientConfig,
+  getInitialClientContext,
+  serverConfig,
+} from "./setup.ts";
 
 const { templateRenderer, defaultRenderInfo, elementRenderer } = fastSSR();
 
 // url imports can't import non-url imports, so we have to pass this in...
 globalContext._PRIVATE_setInstance(new AsyncLocalStorage());
 
-export function render(req, res) {
-  const url = req.originalUrl
+export function render(req, res, options) {
+  const url = req.originalUrl;
+  const initialServerContext = {
+    config: { ...clientConfig, ...serverConfig },
+    ssr: { req, res },
+  };
+
   return new Promise((resolve) => {
-    globalContext.run({ ssr: { req, res } }, async () => {
-      const html = await getHtml(url);
+    globalContext.run(initialServerContext, async () => {
+      const context = globalContext.getStore();
+      // grabs org, packageVersion, etc... to store in context
+      // context technically needs to be set to empty object before this is called
+      const initialClientContext = await getInitialClientContext(
+        req,
+        res,
+        options,
+      );
+      Object.assign(context, initialClientContext);
+
+      const html = await getHtml(url, initialClientContext);
       try {
         const result = templateRenderer.render(html, {
           ...defaultRenderInfo,
@@ -46,12 +66,11 @@ export function render(req, res) {
   });
 }
 
-async function getHtml(url: string) {
+async function getHtml(url: string, initialClientContext) {
+  const { routes } = globalContext.getStore();
   let componentTemplate;
-  const routes = await getRoutes()
-  console.log('routes', routes);
-  try {    
-    setRoutes(addRouteAction(routes));
+  try {
+    setRoutes(routes.map(addRouteAction));
     const router = getRouter();
     componentTemplate = await router.resolve(url);
   } catch (err) {
@@ -68,7 +87,7 @@ async function getHtml(url: string) {
     import.meta.url,
   )
     .toString()
-    .replace("file://", "");  
+    .replace("file://", "");
 
   return html`<!DOCTYPE html>
     <html lang="en">
@@ -80,14 +99,9 @@ async function getHtml(url: string) {
       ${themeTemplate}
       <div id="root">${componentTemplate}</div>
       <script type="module" src="${clientEntrySrc}"></script>
-      <script>window._truffleRoutes = ${JSON.stringify(routes)};</script>
+      <script>window._truffleInitialContext = ${
+    JSON.stringify(initialClientContext)
+  }</script>
     </body>
     </html>`;
-  
-}
-
-async function getRoutes() {
-  // TODO: dev server, use fs-router, prod use db-router
-  const { getRoutes: getFsRoutes } = await import("./fs-router.ts");
-  return getFsRoutes()
 }

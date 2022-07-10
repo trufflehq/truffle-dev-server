@@ -18,7 +18,8 @@ async function clientAction(context) {
 
   let wcElement;
   if (route.moduleUrl) {
-    const { default: wc } = await import(/* @vite-ignore */route.moduleUrl.replace(".", "")) || {}
+    const { default: wc } =
+      await import(/* @vite-ignore */ route.moduleUrl.replace(/^\./, "")) || {};
 
     // reuse existing layout, if there is one
     const existingLayoutElement = document.querySelector(
@@ -44,7 +45,8 @@ async function ssrAction(context) {
 
   let wc;
   if (route.moduleUrl) {
-    wc = (await import(/* @vite-ignore */route.moduleUrl.replace(".", "")))?.default;
+    wc = (await import(/* @vite-ignore */ route.moduleUrl.replace(/^\./, "")))
+      ?.default;
     template += `<${wc.tagName} id="${getDomId(route)}">`;
   }
 
@@ -60,14 +62,16 @@ async function ssrAction(context) {
   return template || null;
 }
 
-function kebabCase(str: string): string {
+function kebabCase(str = ""): string {
   return (
-    str.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g) || []
+    str.match(
+      /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g,
+    ) || []
   )
     .join("-")
     .toLowerCase();
 }
 
 function getDomId(route) {
-  return `module-${kebabCase(route.fullPath)}`
+  return `module-${kebabCase(route.fullPath)}`;
 }
