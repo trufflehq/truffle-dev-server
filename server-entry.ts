@@ -40,12 +40,17 @@ export function render(req, res, options) {
       const context = globalContext.getStore();
       // grabs org, packageVersion, etc... to store in context
       // context technically needs to be set to empty object before this is called
-      const initialClientContext = await getInitialClientContext(
-        req,
-        res,
-        options,
-      );
-      Object.assign(context, initialClientContext);
+      let initialClientContext;
+      try {
+        initialClientContext = await getInitialClientContext(
+          req,
+          res,
+          options,
+        );
+        Object.assign(context, initialClientContext);
+      } catch (err) {
+        console.error("Initial context error", err);
+      }
 
       const html = await getHtml(url, initialClientContext);
       try {
@@ -96,11 +101,11 @@ async function getHtml(url: string, initialClientContext) {
       <title></title>
     </head>
     <body>
-      ${themeTemplate}
-      <div id="root">${componentTemplate}</div>
+      ${themeTemplate || ""}
+      <div id="root">${componentTemplate || ""}</div>
       <script type="module" src="${clientEntrySrc}"></script>
       <script>window._truffleInitialContext = ${
-    JSON.stringify(initialClientContext)
+    JSON.stringify(initialClientContext || "{}")
   }</script>
     </body>
     </html>`;
