@@ -2,9 +2,9 @@ import globalContext from "https://tfl.dev/@truffle/global-context@1.0.0/index.j
 
 // NOTE: this gets injected into dom for client, so DO NOT put anything secret in here!!!
 export const clientConfig = {
-  IS_DEV_ENV: process.env.MODE === "development",
+  IS_DEV_ENV: process.env.NODE_ENV === "development",
   IS_STAGING_ENV: false,
-  IS_PROD_ENV: process.env.MODE !== "development",
+  IS_PROD_ENV: process.env.NODE_ENV !== "development",
   PUBLIC_API_URL: process.env.PUBLIC_MYCELIUM_API_URL,
   API_URL: process.env.PUBLIC_MYCELIUM_API_URL,
   HOST: process.env.SPOROCARP_HOST || "dev.sporocarp.dev",

@@ -12,7 +12,7 @@ export async function startServer(options) {
     logLevel: "silent",
     ssr: { external: ['glob'] }, // errors w/o this
     server: {
-      hmr: process.env.MODE !== "production",
+      hmr: process.env.NODE_ENV !== "production",
       middlewareMode: true,
       // FIXME: I think we might be able to disable when this package is installed via hosted github
       // (vs installed from local)
@@ -21,7 +21,16 @@ export async function startServer(options) {
   });
 
   const app = express();
-  app.use(vite.middlewares)
+
+  if (process.env.NODE_ENV === 'production') {
+    const dir = new URL("../dist", import.meta.url)
+      .toString()
+      .replace("file://", "");
+    app.use(express.static(dir))
+  } else {
+    app.use(vite.middlewares)
+  }
+
   app.use('*', async (req, res, next) => {
     const url = req.originalUrl
     console.log(`Loading ${url}`)
@@ -35,7 +44,7 @@ export async function startServer(options) {
       const entry = (await import.meta.resolve("./server-entry.ts")).toString().replace('file://', '')
       const { render } = await vite.ssrLoadModule(entry);
       const appHtml = await render(req, res, options);
-      const html = process.env.MODE !== "production"
+      const html = process.env.NODE_ENV !== "production"
         ? await vite.transformIndexHtml(url, appHtml)
         : appHtml;
       res.status(200).set({ "Content-Type": "text/html" }).end(html);

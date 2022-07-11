@@ -88,12 +88,11 @@ async function getHtml(url: string, initialClientContext) {
     "https://tfl.dev/@truffle/ui@0.0.3/components/theme/theme-template.js"
   );
 
-  const clientEntrySrc = new URL(
-    "./client-entry.ts",
-    import.meta.url,
-  )
-    .toString()
-    .replace("file://", "");
+  const clientEntrySrc = process.env.NODE_ENV === "production"
+    ? "/client.js"
+    : new URL("./client-entry.ts", import.meta.url)
+      .toString()
+      .replace("file://", "");
 
   return html`<!DOCTYPE html>
     <html lang="en">
