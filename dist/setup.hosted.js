@@ -65,7 +65,6 @@ const GET_DOMAIN_QUERY = gql`query DomainByDomainName($domainName: String) {
   }
 }`;
 async function getDomain(req) {
-  console.log('get domain', req);
   var _a;
   const domainName = {}.HOST_OVERRIDE || req.headers["x-forwarded-host"] || req.headers.host || {}.SPOROCARP_HOST;
   const client = getClient();

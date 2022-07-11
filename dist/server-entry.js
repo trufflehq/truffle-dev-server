@@ -60,21 +60,22 @@ function kebabCase(str = "") {
 function getDomId(route) {
   return `module-${kebabCase(route.fullPath)}`;
 }
+const serverEnv = process.env;
 const clientConfig = {
-  IS_DEV_ENV: false,
+  IS_DEV_ENV: serverEnv.NODE_ENV === "development",
   IS_STAGING_ENV: false,
-  IS_PROD_ENV: true,
-  PUBLIC_API_URL: {}.PUBLIC_MYCELIUM_API_URL,
-  API_URL: {}.PUBLIC_MYCELIUM_API_URL,
-  HOST: {}.SPOROCARP_HOST || "dev.sporocarp.dev"
+  IS_PROD_ENV: serverEnv.NODE_ENV !== "development",
+  PUBLIC_API_URL: serverEnv.PUBLIC_MYCELIUM_API_URL,
+  API_URL: serverEnv.PUBLIC_MYCELIUM_API_URL,
+  HOST: serverEnv.SPOROCARP_HOST || "dev.sporocarp.dev"
 };
 const serverConfig = {
-  PUBLIC_API_URL: {}.PUBLIC_MYCELIUM_API_URL,
-  API_URL: {}.MYCELIUM_API_URL
+  PUBLIC_API_URL: serverEnv.PUBLIC_MYCELIUM_API_URL,
+  API_URL: serverEnv.MYCELIUM_API_URL
 };
 async function getInitialClientContext({ req, res, options, clientConfig: clientConfig2 }) {
   const context = globalContext.getStore();
-  const { getDomain, getNestedRoutes } = await import("./setup.hosted.js");
+  const { getDomain, getNestedRoutes } = await (serverEnv.NODE_ENV === "development" ? import("./setup.local.js") : import("./setup.hosted.js"));
   const domain = await getDomain(req, options);
   const nowServerContext = {
     orgId: domain == null ? void 0 : domain.orgId,
