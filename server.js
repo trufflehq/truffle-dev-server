@@ -23,7 +23,7 @@ export async function startServer(options) {
   const app = express();
 
   if (process.env.NODE_ENV === 'production') {
-    const dir = new URL("../dist", import.meta.url)
+    const dir = new URL("./dist", import.meta.url)
       .toString()
       .replace("file://", "");
     app.use(express.static(dir))
@@ -36,13 +36,14 @@ export async function startServer(options) {
     console.log(`Loading ${url}`)
 
     try {
-      // TODO: import('./server-entry.js') for prod
-      // plus compile the frontend code (.ts files in this repo)
-      // plus use <script> with the compiled .js file in server-entry.ts
-
-      // vite doesn't like file urls :(
-      const entry = (await import.meta.resolve("./server-entry.ts")).toString().replace('file://', '')
-      const { render } = await vite.ssrLoadModule(entry);
+      let render
+      if (process.env.NODE_ENV === 'production') {
+        ({ render } = await import('./dist/server-entry.js'));
+      } else {
+        // vite doesn't like file urls :(
+        const entry = (await import.meta.resolve("./src/server-entry.ts")).toString().replace('file://', '')
+        ({ render } = await vite.ssrLoadModule(entry));
+      }
       const appHtml = await render(req, res, options);
       const html = process.env.NODE_ENV !== "production"
         ? await vite.transformIndexHtml(url, appHtml)

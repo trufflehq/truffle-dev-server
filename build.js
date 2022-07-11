@@ -7,7 +7,7 @@
         entry: "./src/server-entry.ts",
         name: "server",
         formats: ["es"],
-        fileName: () => `server.js`
+        fileName: () => `server-entry.js`
       },
       rollupOptions: {
         external: ['node:async_hooks'],
@@ -22,7 +22,7 @@
         entry: "./src/client-entry.ts",
         name: "client",
         formats: ["es"],
-        fileName: () => `client.js`,
+        fileName: () => `client-entry.js`,
       },
       rollupOptions: {
         external: ['node:async_hooks'],

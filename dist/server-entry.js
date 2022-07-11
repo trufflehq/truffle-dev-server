@@ -144,7 +144,7 @@ async function getHtml(url, initialClientContext) {
     componentTemplate = "";
   }
   const { default: themeTemplate } = await import("https://tfl.dev/@truffle/ui@0.0.3/components/theme/theme-template.js");
-  const clientEntrySrc = "/client.js";
+  const clientEntrySrc = "/client-entry.js";
   return html(_a || (_a = __template(['<!DOCTYPE html>\n    <html lang="en">\n    <head>\n      <meta charset="UTF-8">\n      <title></title>\n    </head>\n    <body>\n      ', '\n      <div id="root">', '</div>\n      <script type="module" src="', '"><\/script>\n      <script>window._truffleInitialContext = ', "<\/script>\n    </body>\n    </html>"])), themeTemplate || "", componentTemplate || "", clientEntrySrc, JSON.stringify(initialClientContext || "{}"));
 }
 export { render };

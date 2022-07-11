@@ -89,7 +89,7 @@ async function getHtml(url: string, initialClientContext) {
   );
 
   const clientEntrySrc = process.env.NODE_ENV === "production"
-    ? "/client.js"
+    ? "/client-entry.js"
     : new URL("./client-entry.ts", import.meta.url)
       .toString()
       .replace("file://", "");
