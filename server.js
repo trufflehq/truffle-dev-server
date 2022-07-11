@@ -12,6 +12,7 @@ export async function startServer(options) {
     logLevel: "silent",
     ssr: { external: ['glob'] }, // errors w/o this
     server: {
+      hmr: process.env.MODE !== "production",
       middlewareMode: true,
       // FIXME: I think we might be able to disable when this package is installed via hosted github
       // (vs installed from local)
@@ -34,7 +35,9 @@ export async function startServer(options) {
       const entry = (await import.meta.resolve("./server-entry.ts")).toString().replace('file://', '')
       const { render } = await vite.ssrLoadModule(entry);
       const appHtml = await render(req, res, options);
-      const html = await vite.transformIndexHtml(url, appHtml);
+      const html = process.env.MODE !== "production"
+        ? await vite.transformIndexHtml(url, appHtml)
+        : appHtml;
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {
       // If an error is caught, let Vite fix the stracktrace so it maps back to
