@@ -73,19 +73,19 @@ export function render(req, res, options) {
 }
 
 async function getHtml(url: string, initialClientContext) {
-  const { routes } = globalContext.getStore();
+  const context = globalContext.getStore();
   let componentTemplate;
   try {
-    setRoutes(routes.map(addRouteAction));
+    setRoutes(context._routes.map(addRouteAction));
     const router = getRouter();
     componentTemplate = await router.resolve(url);
   } catch (err) {
-    console.log("Base HTML error", err);
+    console.log("Base HTML error", err.message);
     componentTemplate = "";
   }
 
   const { default: themeTemplate } = await import(
-    "https://tfl.dev/@truffle/ui@0.0.2/components/theme/theme-template.js"
+    "https://tfl.dev/@truffle/ui@0.0.3/components/theme/theme-template.js"
   );
 
   const clientEntrySrc = new URL(

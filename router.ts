@@ -13,7 +13,7 @@ export function addRouteAction(route) {
 
 // create a dom node and reuse existing dom nodes for layouts
 async function clientAction(context) {
-  const { path, params, route } = context;
+  const { route } = context;
   const childElement = await context.next();
 
   let wcElement;
@@ -40,7 +40,7 @@ async function clientAction(context) {
 
 // create the full concat'd string of component elements
 async function ssrAction(context) {
-  const { path, params, route } = context;
+  const { route } = context;
   let template = ``;
 
   let wc;

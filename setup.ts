@@ -35,9 +35,8 @@ export async function getInitialClientContext(
   const routes = await getNestedRoutes({ domain });
 
   return {
-    domain,
-    routes,
     config: clientConfig,
+    _routes: routes,
     ...nowServerContext,
   };
 }

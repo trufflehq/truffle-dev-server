@@ -8,7 +8,7 @@ import { addRouteAction } from "./router.ts";
 
 globalContext.setGlobalValue(window._truffleInitialContext || {});
 
-const routesWithActions = window._truffleInitialContext.routes.map(
+const routesWithActions = window._truffleInitialContext._routes.map(
   addRouteAction,
 );
 console.log("context", window._truffleInitialContext);
