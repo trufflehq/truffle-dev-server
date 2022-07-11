@@ -16,7 +16,6 @@ console.log("context", window._truffleInitialContext);
 setRoutes(routesWithActions);
 const router = getRouter();
 
-// const history = createBrowserHistory();
 let unlisten = listen(handleRoute);
 
 async function handleRoute({ location, action = "" }) {
