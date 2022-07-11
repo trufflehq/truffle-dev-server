@@ -5,7 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "node --experimental-import-meta-resolve --experimental-network-imports ./server.js"
+    "dev": "node --experimental-import-meta-resolve --experimental-network-imports ./server.js",
+    "build": "node ./build.js"
   },
   "author": "Truffle",
   "license": "ISC",
