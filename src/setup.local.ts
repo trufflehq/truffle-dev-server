@@ -14,6 +14,11 @@ const GET_DOMAIN_QUERY = gql`query DomainGetConnection($packageVersionId: ID) {
 }`;
 
 export async function getDomain(req, { packageVersion }) {
+  if (!packageVersion) {
+    console.warn("PackageVersion not found, you may need to deploy first");
+    return null;
+  }
+
   const query = GET_DOMAIN_QUERY;
   const variables = { packageVersionId: packageVersion.id };
 
@@ -23,11 +28,11 @@ export async function getDomain(req, { packageVersion }) {
 
   if (!domain) {
     const context = globalContext.getStore();
-    console.log(
+    console.warn(
       "Domain not found:",
       packageVersion.id,
       JSON.stringify(context.config, null, 2),
-      response.error,
+      response.error?.message,
     );
   }
 
