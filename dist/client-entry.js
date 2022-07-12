@@ -1,7 +1,7 @@
 var _a, _b;
 import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.js";
-import { setRoutes, getRouter } from "https://tfl.dev/@truffle/router@1.0.0/index.js";
-import { listen } from "https://tfl.dev/@truffle/router@1.0.0/history.js";
+import { setRoutes, getRouter } from "https://tfl.dev/@truffle/router@^1.0.0/index.js";
+import { listen } from "https://tfl.dev/@truffle/router@^1.0.0/history.js";
 const isSsr = typeof document === "undefined" || ((_b = (_a = globalThis == null ? void 0 : globalThis.process) == null ? void 0 : _a.release) == null ? void 0 : _b.name) === "node";
 function addRouteAction(route) {
   return {

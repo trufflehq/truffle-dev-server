@@ -4,7 +4,7 @@ import fastSSR from "https://npm.tfl.dev/@microsoft/fast-ssr";
 import { html } from "https://npm.tfl.dev/@microsoft/fast-element@beta";
 import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.js";
 import { AsyncLocalStorage } from "node:async_hooks";
-import { setRoutes, getRouter } from "https://tfl.dev/@truffle/router@1.0.0/index.js";
+import { setRoutes, getRouter } from "https://tfl.dev/@truffle/router@^1.0.0/index.js";
 const isSsr = typeof document === "undefined" || ((_b = (_a2 = globalThis == null ? void 0 : globalThis.process) == null ? void 0 : _a2.release) == null ? void 0 : _b.name) === "node";
 function addRouteAction(route) {
   return {

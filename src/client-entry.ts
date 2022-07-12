@@ -2,8 +2,8 @@ import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.
 import {
   getRouter,
   setRoutes,
-} from "https://tfl.dev/@truffle/router@1.0.0/index.js";
-import { listen } from "https://tfl.dev/@truffle/router@1.0.0/history.js";
+} from "https://tfl.dev/@truffle/router@^1.0.0/index.js";
+import { listen } from "https://tfl.dev/@truffle/router@^1.0.0/history.js";
 import { addRouteAction } from "./router.ts";
 
 globalContext.setGlobalValue(window._truffleInitialContext || {});
