@@ -29,11 +29,13 @@ export async function getInitialClientContext(
       : "./setup.hosted.ts"
   );
   const domain = await getDomain(req, options);
+
   // need to get user before we get routes, so we 1) have org set, and 2) can get routes authed
   // to filter out routes they shouldn't be able to see
   const nowServerContext = {
     orgId: domain?.orgId,
     packageVersionId: domain?.packageVersionId,
+    packageId: domain?.packageId,
   };
   Object.assign(context, nowServerContext);
   const routes = await getNestedRoutes({ domain });

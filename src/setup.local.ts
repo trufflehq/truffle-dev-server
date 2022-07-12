@@ -7,6 +7,7 @@ const GET_DOMAIN_QUERY = gql`query DomainGetConnection($packageVersionId: ID) {
       id
       domainName
       packageVersionId
+      packageId
       orgId
     }
   }
@@ -17,6 +18,7 @@ export async function getDomain(req, { packageVersion }) {
   const variables = { packageVersionId: packageVersion.id };
 
   const response = await getClient().query(query, variables).toPromise();
+
   const domain = response.data?.domainConnection.nodes[0];
 
   if (!domain) {

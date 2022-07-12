@@ -61,6 +61,7 @@ const GET_DOMAIN_QUERY = gql`query DomainByDomainName($domainName: String) {
   domain(domainName: $domainName) {
     orgId
     packageVersionId
+    packageId
     org { slug }
   }
 }`;

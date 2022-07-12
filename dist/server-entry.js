@@ -79,7 +79,8 @@ async function getInitialClientContext({ req, res, options, clientConfig: client
   const domain = await getDomain(req, options);
   const nowServerContext = {
     orgId: domain == null ? void 0 : domain.orgId,
-    packageVersionId: domain == null ? void 0 : domain.packageVersionId
+    packageVersionId: domain == null ? void 0 : domain.packageVersionId,
+    packageId: domain == null ? void 0 : domain.packageId
   };
   Object.assign(context, nowServerContext);
   const routes = await getNestedRoutes({ domain });

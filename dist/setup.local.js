@@ -2278,6 +2278,7 @@ const GET_DOMAIN_QUERY = gql`query DomainGetConnection($packageVersionId: ID) {
       id
       domainName
       packageVersionId
+      packageId
       orgId
     }
   }
