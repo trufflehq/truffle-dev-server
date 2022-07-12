@@ -1,4 +1,4 @@
-import { getClient, gql } from "https://tfl.dev/@truffle/api@0.1.0/client.js";
+import { getClient, gql } from "https://tfl.dev/@truffle/api@^0.1.0/client.js";
 
 const WILDCARD_PATH = "(.*)";
 const WILDCARD_PATH_NOT_EMPTY = "(.+)";

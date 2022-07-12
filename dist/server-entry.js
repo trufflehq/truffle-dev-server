@@ -2,7 +2,7 @@ var _a2, _b;
 import "https://npm.tfl.dev/@microsoft/fast-ssr/install-dom-shim";
 import fastSSR from "https://npm.tfl.dev/@microsoft/fast-ssr";
 import { html } from "https://npm.tfl.dev/@microsoft/fast-element@beta";
-import globalContext from "https://tfl.dev/@truffle/global-context@1.0.0/index.js";
+import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.js";
 import { AsyncLocalStorage } from "node:async_hooks";
 import { setRoutes, getRouter } from "https://tfl.dev/@truffle/router@1.0.0/index.js";
 const isSsr = typeof document === "undefined" || ((_b = (_a2 = globalThis == null ? void 0 : globalThis.process) == null ? void 0 : _a2.release) == null ? void 0 : _b.name) === "node";
@@ -144,7 +144,7 @@ async function getHtml(url, initialClientContext) {
     console.log("Base HTML error", err.message);
     componentTemplate = "";
   }
-  const { default: themeTemplate } = await import("https://tfl.dev/@truffle/ui@0.0.3/components/theme/theme-template.js");
+  const { default: themeTemplate } = await import("https://tfl.dev/@truffle/ui@~0.0.3/components/theme/theme-template.js");
   const clientEntrySrc = "/client-entry.js";
   return html(_a || (_a = __template(['<!DOCTYPE html>\n    <html lang="en">\n    <head>\n      <meta charset="UTF-8">\n      <title></title>\n    </head>\n    <body>\n      ', '\n      <div id="root">', '</div>\n      <script type="module" src="', '"><\/script>\n      <script>window._truffleInitialContext = ', "<\/script>\n    </body>\n    </html>"])), themeTemplate || "", componentTemplate || "", clientEntrySrc, JSON.stringify(initialClientContext || "{}"));
 }

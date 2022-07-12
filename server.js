@@ -42,12 +42,12 @@ export async function startServer(options) {
       } else {
         // vite doesn't like file urls :(
         const entry = (await import.meta.resolve("./src/server-entry.ts")).toString().replace('file://', '')
-        ({ render } = await vite.ssrLoadModule(entry));
+        ;({ render } = await vite.ssrLoadModule(entry));
       }
       const appHtml = await render(req, res, options);
-      const html = process.env.NODE_ENV !== "production"
-        ? await vite.transformIndexHtml(url, appHtml)
-        : appHtml;
+      const html = process.env.NODE_ENV === "production"
+        ? appHtml
+        : await vite.transformIndexHtml(url, appHtml);
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {
       // If an error is caught, let Vite fix the stracktrace so it maps back to

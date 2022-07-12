@@ -1,7 +1,7 @@
 import "https://npm.tfl.dev/@microsoft/fast-ssr/install-dom-shim";
 import fastSSR from "https://npm.tfl.dev/@microsoft/fast-ssr";
 import { html } from "https://npm.tfl.dev/@microsoft/fast-element@beta";
-import globalContext from "https://tfl.dev/@truffle/global-context@1.0.0/index.js";
+import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.js";
 import { AsyncLocalStorage } from "node:async_hooks";
 // NOTE: importing cjs will fail in this file (eg express for types)
 
@@ -85,7 +85,7 @@ async function getHtml(url: string, initialClientContext) {
   }
 
   const { default: themeTemplate } = await import(
-    "https://tfl.dev/@truffle/ui@0.0.3/components/theme/theme-template.js"
+    "https://tfl.dev/@truffle/ui@~0.0.3/components/theme/theme-template.js"
   );
 
   const clientEntrySrc = process.env.NODE_ENV === "production"

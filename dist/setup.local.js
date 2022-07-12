@@ -1,5 +1,5 @@
-import { gql, getClient } from "https://tfl.dev/@truffle/api@0.1.0/client.js";
-import globalContext from "https://tfl.dev/@truffle/global-context@1.0.0/index.js";
+import { gql, getClient } from "https://tfl.dev/@truffle/api@^0.1.0/client.js";
+import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.js";
 var fs$3 = {};
 var __viteBrowserExternal = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,

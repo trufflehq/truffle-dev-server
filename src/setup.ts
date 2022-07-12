@@ -1,4 +1,4 @@
-import globalContext from "https://tfl.dev/@truffle/global-context@1.0.0/index.js";
+import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.js";
 
 // req for vite build to not statically replace.
 // vite does it bc normally vite builds client code. this is server code

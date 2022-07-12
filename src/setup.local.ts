@@ -1,5 +1,5 @@
-import { getClient, gql } from "https://tfl.dev/@truffle/api@0.1.0/client.js";
-import globalContext from "https://tfl.dev/@truffle/global-context@1.0.0/index.js";
+import { getClient, gql } from "https://tfl.dev/@truffle/api@^0.1.0/client.js";
+import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.js";
 
 const GET_DOMAIN_QUERY = gql`query DomainGetConnection($packageVersionId: ID) {
   domainConnection(packageVersionId: $packageVersionId) {
