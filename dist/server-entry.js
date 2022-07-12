@@ -2,9 +2,9 @@ var _a2, _b;
 import "https://npm.tfl.dev/@microsoft/fast-ssr/install-dom-shim";
 import fastSSR from "https://npm.tfl.dev/@microsoft/fast-ssr";
 import { html } from "https://npm.tfl.dev/@microsoft/fast-element@beta";
-import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.js";
+import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.ts";
+import UniversalRouter from "https://npm.tfl.dev/universal-router@9";
 import { AsyncLocalStorage } from "node:async_hooks";
-import { setRoutes, getRouter } from "https://tfl.dev/@truffle/router@^1.0.0/index.js";
 const isSsr = typeof document === "undefined" || ((_b = (_a2 = globalThis == null ? void 0 : globalThis.process) == null ? void 0 : _a2.release) == null ? void 0 : _b.name) === "node";
 function addRouteAction(route) {
   return {
@@ -73,21 +73,21 @@ const serverConfig = {
   PUBLIC_API_URL: serverEnv.PUBLIC_MYCELIUM_API_URL,
   API_URL: serverEnv.MYCELIUM_API_URL
 };
-async function getInitialClientContext({ req, res, options, clientConfig: clientConfig2 }) {
+async function getInitialClientData({ req, res, options, clientConfig: clientConfig2 }) {
   const context = globalContext.getStore();
   const { getDomain, getNestedRoutes } = await (serverEnv.NODE_ENV === "development" ? import("./setup.local.js") : import("./setup.hosted.js"));
   const domain = await getDomain(req, options);
-  const nowServerContext = {
+  const clientContext = {
     orgId: domain == null ? void 0 : domain.orgId,
     packageVersionId: domain == null ? void 0 : domain.packageVersionId,
     packageId: domain == null ? void 0 : domain.packageId
   };
-  Object.assign(context, nowServerContext);
+  Object.assign(context, context);
   const routes = await getNestedRoutes({ domain });
   return {
-    config: clientConfig2,
-    _routes: routes,
-    ...nowServerContext
+    clientConfig: clientConfig2,
+    routes,
+    clientContext
   };
 }
 var __freeze = Object.freeze;
@@ -105,19 +105,19 @@ function render(req, res, options) {
   return new Promise((resolve) => {
     globalContext.run(initialServerContext, async () => {
       const context = globalContext.getStore();
-      let initialClientContext;
+      let initialClientData;
       try {
-        initialClientContext = await getInitialClientContext({
+        initialClientData = await getInitialClientData({
           req,
           res,
           options,
           clientConfig
         });
-        Object.assign(context, initialClientContext);
+        Object.assign(context, initialClientData);
       } catch (err) {
         console.error("Initial context error", err);
       }
-      const html2 = await getHtml(url, initialClientContext);
+      const html2 = await getHtml(url, initialClientData);
       try {
         const result = templateRenderer.render(html2, {
           ...defaultRenderInfo
@@ -134,19 +134,17 @@ function render(req, res, options) {
     });
   });
 }
-async function getHtml(url, initialClientContext) {
-  const context = globalContext.getStore();
+async function getHtml(url, initialClientData) {
   let componentTemplate;
   try {
-    setRoutes(context._routes.map(addRouteAction));
-    const router = getRouter();
+    const router = new UniversalRouter(initialClientData.routes.map(addRouteAction));
     componentTemplate = await router.resolve(url);
   } catch (err) {
     console.log("Base HTML error", err.message);
     componentTemplate = "";
   }
-  const { default: themeTemplate } = await import("https://tfl.dev/@truffle/ui@~0.0.3/components/theme/theme-template.js");
+  const { default: themeTemplate } = await import("https://tfl.dev/@truffle/ui@~0.0.3/components/theme/theme-template.ts");
   const clientEntrySrc = "/client-entry.js";
-  return html(_a || (_a = __template(['<!DOCTYPE html>\n    <html lang="en">\n    <head>\n      <meta charset="UTF-8">\n      <title></title>\n    </head>\n    <body>\n      ', '\n      <div id="root">', '</div>\n      <script type="module" src="', '"><\/script>\n      <script>window._truffleInitialContext = ', "<\/script>\n    </body>\n    </html>"])), themeTemplate || "", componentTemplate || "", clientEntrySrc, JSON.stringify(initialClientContext || "{}"));
+  return html(_a || (_a = __template(['<!DOCTYPE html>\n    <html lang="en">\n    <head>\n      <meta charset="UTF-8">\n      <title></title>\n    </head>\n    <body>\n      ', '\n      <div id="root">', '</div>\n      <script type="module" src="', '"><\/script>\n      <script>window._truffleInitialData = ', "<\/script>\n    </body>\n    </html>"])), themeTemplate || "", componentTemplate || "", clientEntrySrc, JSON.stringify(initialClientData || "{}"));
 }
 export { render };

@@ -1,4 +1,4 @@
-import { getClient, gql } from "https://tfl.dev/@truffle/api@^0.1.0/client.js";
+import { getClient, gql } from "https://tfl.dev/@truffle/api@^0.1.0/client.ts";
 
 const GET_DOMAIN_QUERY = gql`query DomainByDomainName($domainName: String) {
   domain(domainName: $domainName) {

@@ -1,22 +1,18 @@
-import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.js";
-import {
-  getRouter,
-  setRoutes,
-} from "https://tfl.dev/@truffle/router@^1.0.0/index.js";
-import { listen } from "https://tfl.dev/@truffle/router@^1.0.0/history.js";
+import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.ts";
+import { setConfig } from "https://tfl.dev/@truffle/config@^1.0.0/index.ts";
+import history from "https://npm.tfl.dev/history@5/browser";
+import UniversalRouter from "https://npm.tfl.dev/universal-router@9";
+
 import { addRouteAction } from "./router.ts";
 
-globalContext.setGlobalValue(window._truffleInitialContext || {});
+const { clientConfig, clientContext, routes } = window._truffleInitialData;
 
-const routesWithActions = window._truffleInitialContext._routes.map(
-  addRouteAction,
-);
-console.log("context", window._truffleInitialContext);
+globalContext.setGlobalValue(clientContext || {});
+setConfig(clientConfig || {});
 
-setRoutes(routesWithActions);
-const router = getRouter();
+const router = new UniversalRouter(routes.map(addRouteAction));
 
-let unlisten = listen(handleRoute);
+history.listen(handleRoute);
 
 async function handleRoute({ location, action = "" }) {
   const element = await router.resolve(location.pathname);

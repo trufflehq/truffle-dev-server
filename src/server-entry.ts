@@ -1,7 +1,8 @@
 import "https://npm.tfl.dev/@microsoft/fast-ssr/install-dom-shim";
 import fastSSR from "https://npm.tfl.dev/@microsoft/fast-ssr";
 import { html } from "https://npm.tfl.dev/@microsoft/fast-element@beta";
-import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.js";
+import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.ts";
+import UniversalRouter from "https://npm.tfl.dev/universal-router@9";
 import { AsyncLocalStorage } from "node:async_hooks";
 // NOTE: importing cjs will fail in this file (eg express for types)
 
@@ -12,16 +13,8 @@ import { AsyncLocalStorage } from "node:async_hooks";
 // on npm.tfl.dev [ERR_NETWORK_IMPORT_DISALLOWED]: import of 'undefined'
 // import { LitElementRenderer } from "@lit-labs/ssr/lib/lit-element-renderer.js";
 
-import {
-  getRouter,
-  setRoutes,
-} from "https://tfl.dev/@truffle/router@1.0.0/index.js";
 import { addRouteAction } from "./router.ts";
-import {
-  clientConfig,
-  getInitialClientContext,
-  serverConfig,
-} from "./setup.ts";
+import { clientConfig, getInitialClientData, serverConfig } from "./setup.ts";
 
 const { templateRenderer, defaultRenderInfo, elementRenderer } = fastSSR();
 
@@ -40,20 +33,20 @@ export function render(req, res, options) {
       const context = globalContext.getStore();
       // grabs org, packageVersion, etc... to store in context
       // context technically needs to be set to empty object before this is called
-      let initialClientContext;
+      let initialClientData;
       try {
-        initialClientContext = await getInitialClientContext({
+        initialClientData = await getInitialClientData({
           req,
           res,
           options,
           clientConfig,
         });
-        Object.assign(context, initialClientContext);
+        Object.assign(context, initialClientData);
       } catch (err) {
         console.error("Initial context error", err);
       }
 
-      const html = await getHtml(url, initialClientContext);
+      const html = await getHtml(url, initialClientData);
       try {
         const result = templateRenderer.render(html, {
           ...defaultRenderInfo,
@@ -72,12 +65,12 @@ export function render(req, res, options) {
   });
 }
 
-async function getHtml(url: string, initialClientContext) {
-  const context = globalContext.getStore();
+async function getHtml(url: string, initialClientData) {
   let componentTemplate;
   try {
-    setRoutes(context._routes.map(addRouteAction));
-    const router = getRouter();
+    const router = new UniversalRouter(
+      initialClientData.routes.map(addRouteAction),
+    );
     componentTemplate = await router.resolve(url);
   } catch (err) {
     console.log("Base HTML error", err.message);
@@ -85,7 +78,7 @@ async function getHtml(url: string, initialClientContext) {
   }
 
   const { default: themeTemplate } = await import(
-    "https://tfl.dev/@truffle/ui@~0.0.3/components/theme/theme-template.js"
+    "https://tfl.dev/@truffle/ui@~0.0.3/components/theme/theme-template.ts"
   );
 
   const clientEntrySrc = process.env.NODE_ENV === "production"
@@ -104,8 +97,8 @@ async function getHtml(url: string, initialClientContext) {
       ${themeTemplate || ""}
       <div id="root">${componentTemplate || ""}</div>
       <script type="module" src="${clientEntrySrc}"></script>
-      <script>window._truffleInitialContext = ${
-    JSON.stringify(initialClientContext || "{}")
+      <script>window._truffleInitialData = ${
+    JSON.stringify(initialClientData || "{}")
   }</script>
     </body>
     </html>`;

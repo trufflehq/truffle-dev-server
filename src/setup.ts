@@ -1,4 +1,4 @@
-import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.js";
+import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.ts";
 
 // req for vite build to not statically replace.
 // vite does it bc normally vite builds client code. this is server code
@@ -19,7 +19,7 @@ export const serverConfig = {
 };
 
 // NOTE: this gets sent to client. needs to be public data and JSON.stringify-able
-export async function getInitialClientContext(
+export async function getInitialClientData(
   { req, res, options, clientConfig },
 ) {
   const context = globalContext.getStore();
@@ -32,17 +32,18 @@ export async function getInitialClientContext(
 
   // need to get user before we get routes, so we 1) have org set, and 2) can get routes authed
   // to filter out routes they shouldn't be able to see
-  const nowServerContext = {
+  const clientContext = {
     orgId: domain?.orgId,
     packageVersionId: domain?.packageVersionId,
     packageId: domain?.packageId,
   };
-  Object.assign(context, nowServerContext);
+  // set context now so anything in followed fns can use it
+  Object.assign(context, context);
   const routes = await getNestedRoutes({ domain });
 
   return {
-    config: clientConfig,
-    _routes: routes,
-    ...nowServerContext,
+    clientConfig,
+    routes,
+    clientContext,
   };
 }

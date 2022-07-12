@@ -1,5 +1,5 @@
-import { gql, getClient } from "https://tfl.dev/@truffle/api@^0.1.0/client.js";
-import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.js";
+import { gql, getClient } from "https://tfl.dev/@truffle/api@^0.1.0/client.ts";
+import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.ts";
 var fs$3 = {};
 var __viteBrowserExternal = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -2284,14 +2284,18 @@ const GET_DOMAIN_QUERY = gql`query DomainGetConnection($packageVersionId: ID) {
   }
 }`;
 async function getDomain(req, { packageVersion }) {
-  var _a;
+  var _a, _b;
+  if (!packageVersion) {
+    console.warn("PackageVersion not found, you may need to deploy first");
+    return null;
+  }
   const query = GET_DOMAIN_QUERY;
   const variables = { packageVersionId: packageVersion.id };
   const response = await getClient().query(query, variables).toPromise();
   const domain = (_a = response.data) == null ? void 0 : _a.domainConnection.nodes[0];
   if (!domain) {
     const context = globalContext.getStore();
-    console.log("Domain not found:", packageVersion.id, JSON.stringify(context.config, null, 2), response.error);
+    console.warn("Domain not found:", packageVersion.id, JSON.stringify(context.config, null, 2), (_b = response.error) == null ? void 0 : _b.message);
   }
   return domain;
 }

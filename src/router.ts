@@ -1,3 +1,5 @@
+import { setParams } from "https://tfl.dev/@truffle/router@^1.0.0/index.ts";
+
 // TODO: smarter detection of node and deno in sep lib or context
 const isSsr = typeof document === "undefined" ||
   globalThis?.process?.release?.name === "node";
@@ -13,7 +15,10 @@ export function addRouteAction(route) {
 
 // create a dom node and reuse existing dom nodes for layouts
 async function clientAction(context) {
-  const { route } = context;
+  const { route, params } = context;
+
+  setParams(params);
+
   const childElement = await context.next();
 
   let wcElement;
@@ -40,7 +45,10 @@ async function clientAction(context) {
 
 // create the full concat'd string of component elements
 async function ssrAction(context) {
-  const { route } = context;
+  const { route, params } = context;
+
+  setParams(params);
+
   let template = ``;
 
   let wc;
