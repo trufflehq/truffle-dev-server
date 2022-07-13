@@ -4,7 +4,9 @@ import fastSSR from "https://npm.tfl.dev/@microsoft/fast-ssr";
 import { html } from "https://npm.tfl.dev/@microsoft/fast-element@beta";
 import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.ts";
 import UniversalRouter from "https://npm.tfl.dev/universal-router@9";
+import { setConfig } from "https://tfl.dev/@truffle/config@^1.0.0/index.ts";
 import { AsyncLocalStorage } from "node:async_hooks";
+import { setParams } from "https://tfl.dev/@truffle/router@^1.0.0/index.ts";
 const isSsr = typeof document === "undefined" || ((_b = (_a2 = globalThis == null ? void 0 : globalThis.process) == null ? void 0 : _a2.release) == null ? void 0 : _b.name) === "node";
 function addRouteAction(route) {
   return {
@@ -15,7 +17,8 @@ function addRouteAction(route) {
   };
 }
 async function clientAction(context) {
-  const { route } = context;
+  const { route, params } = context;
+  setParams(params);
   const childElement = await context.next();
   let wcElement;
   if (route.moduleUrl) {
@@ -35,7 +38,8 @@ async function clientAction(context) {
 }
 async function ssrAction(context) {
   var _a3;
-  const { route } = context;
+  const { route, params } = context;
+  setParams(params);
   let template = ``;
   let wc;
   if (route.moduleUrl) {
@@ -96,12 +100,10 @@ var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __f
 var _a;
 const { templateRenderer, defaultRenderInfo, elementRenderer } = fastSSR();
 globalContext._PRIVATE_setInstance(new AsyncLocalStorage());
+setConfig(serverConfig);
 function render(req, res, options) {
   const url = req.originalUrl;
-  const initialServerContext = {
-    config: { ...clientConfig, ...serverConfig },
-    ssr: { req, res }
-  };
+  const initialServerContext = { ssr: { req, res } };
   return new Promise((resolve) => {
     globalContext.run(initialServerContext, async () => {
       const context = globalContext.getStore();

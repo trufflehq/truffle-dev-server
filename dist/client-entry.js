@@ -3,6 +3,7 @@ import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.
 import { setConfig } from "https://tfl.dev/@truffle/config@^1.0.0/index.ts";
 import history from "https://npm.tfl.dev/history@5/browser";
 import UniversalRouter from "https://npm.tfl.dev/universal-router@9";
+import { setParams } from "https://tfl.dev/@truffle/router@^1.0.0/index.ts";
 const isSsr = typeof document === "undefined" || ((_b = (_a = globalThis == null ? void 0 : globalThis.process) == null ? void 0 : _a.release) == null ? void 0 : _b.name) === "node";
 function addRouteAction(route) {
   return {
@@ -13,7 +14,8 @@ function addRouteAction(route) {
   };
 }
 async function clientAction(context) {
-  const { route } = context;
+  const { route, params } = context;
+  setParams(params);
   const childElement = await context.next();
   let wcElement;
   if (route.moduleUrl) {
@@ -33,7 +35,8 @@ async function clientAction(context) {
 }
 async function ssrAction(context) {
   var _a2;
-  const { route } = context;
+  const { route, params } = context;
+  setParams(params);
   let template = ``;
   let wc;
   if (route.moduleUrl) {
@@ -61,7 +64,6 @@ function getDomId(route) {
 const { clientConfig, clientContext, routes } = window._truffleInitialData;
 globalContext.setGlobalValue(clientContext || {});
 setConfig(clientConfig || {});
-routes.map(addRouteAction);
 const router = new UniversalRouter(routes.map(addRouteAction));
 history.listen(handleRoute);
 async function handleRoute({ location, action = "" }) {
