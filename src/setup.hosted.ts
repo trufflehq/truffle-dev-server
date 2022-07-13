@@ -1,5 +1,9 @@
 import { getClient, gql } from "https://tfl.dev/@truffle/api@^0.1.0/client.ts";
 
+// req for vite build to not statically replace.
+// vite does it bc normally vite builds client code. this is server code
+const serverEnv = process.env;
+
 const GET_DOMAIN_QUERY = gql`query DomainByDomainName($domainName: String) {
   domain(domainName: $domainName) {
     orgId
@@ -10,9 +14,9 @@ const GET_DOMAIN_QUERY = gql`query DomainByDomainName($domainName: String) {
 }`;
 
 export async function getDomain(req) {
-  const domainName = process.env.HOST_OVERRIDE ||
+  const domainName = serverEnv.HOST_OVERRIDE ||
     req.headers["x-forwarded-host"] || req.headers.host ||
-    process.env.SPOROCARP_HOST;
+    serverEnv.SPOROCARP_HOST;
 
   const client = getClient();
   const domainResponse = await client

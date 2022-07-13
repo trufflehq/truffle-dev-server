@@ -31,6 +31,7 @@ async function getNestedRoutes({ domain }) {
     input: { packageVersionId: domain.packageVersionId }
   }).toPromise();
   const routes = response.data.routeConnection.nodes;
+  console.log("r", routes, response);
   const rootRoutes = routes.filter(({ parentId }) => parentId === EMPTY_UUID);
   const nestedRoutes = rootRoutes.map((route) => getNestedRoute({ route, routes }));
   return nestedRoutes;
@@ -57,6 +58,7 @@ function getNestedRoute({ route, routes, parentPath = "" }) {
   }
   return nestedRoute;
 }
+const serverEnv = process.env;
 const GET_DOMAIN_QUERY = gql`query DomainByDomainName($domainName: String) {
   domain(domainName: $domainName) {
     orgId
@@ -67,7 +69,7 @@ const GET_DOMAIN_QUERY = gql`query DomainByDomainName($domainName: String) {
 }`;
 async function getDomain(req) {
   var _a;
-  const domainName = {}.HOST_OVERRIDE || req.headers["x-forwarded-host"] || req.headers.host || {}.SPOROCARP_HOST;
+  const domainName = serverEnv.HOST_OVERRIDE || req.headers["x-forwarded-host"] || req.headers.host || serverEnv.SPOROCARP_HOST;
   const client = getClient();
   const domainResponse = await client.query(GET_DOMAIN_QUERY, { domainName, _skipAuth: true }).toPromise();
   const domain = (_a = domainResponse == null ? void 0 : domainResponse.data) == null ? void 0 : _a.domain;

@@ -86,7 +86,7 @@ async function getInitialClientData({ req, res, options, clientConfig: clientCon
     packageVersionId: domain == null ? void 0 : domain.packageVersionId,
     packageId: domain == null ? void 0 : domain.packageId
   };
-  Object.assign(context, context);
+  Object.assign(context, clientContext);
   const routes = await getNestedRoutes({ domain });
   return {
     clientConfig: clientConfig2,
