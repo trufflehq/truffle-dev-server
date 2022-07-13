@@ -4,18 +4,20 @@ import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.
 // vite does it bc normally vite builds client code. this is server code
 const serverEnv = process.env;
 
+const DEFAULT_MYCELIUM_API_URL = "https://mycelium.staging.bio";
+
 // NOTE: this gets injected into dom for client, so DO NOT put anything secret in here!!!
 export const clientConfig = {
   IS_DEV_ENV: serverEnv.NODE_ENV === "development",
   IS_STAGING_ENV: false,
   IS_PROD_ENV: serverEnv.NODE_ENV !== "development",
-  PUBLIC_API_URL: serverEnv.PUBLIC_MYCELIUM_API_URL,
-  API_URL: serverEnv.PUBLIC_MYCELIUM_API_URL,
+  PUBLIC_API_URL: serverEnv.PUBLIC_MYCELIUM_API_URL || DEFAULT_MYCELIUM_API_URL,
+  API_URL: serverEnv.PUBLIC_MYCELIUM_API_URL || DEFAULT_MYCELIUM_API_URL,
   HOST: serverEnv.SPOROCARP_HOST || "dev.sporocarp.dev",
 };
 export const serverConfig = {
-  PUBLIC_API_URL: serverEnv.PUBLIC_MYCELIUM_API_URL,
-  API_URL: serverEnv.MYCELIUM_API_URL,
+  PUBLIC_API_URL: serverEnv.PUBLIC_MYCELIUM_API_URL || DEFAULT_MYCELIUM_API_URL,
+  API_URL: serverEnv.MYCELIUM_API_URL || DEFAULT_MYCELIUM_API_URL,
 };
 
 // NOTE: this gets sent to client. needs to be public data and JSON.stringify-able
