@@ -3,6 +3,7 @@ import fastSSR from "https://npm.tfl.dev/@microsoft/fast-ssr";
 import { html } from "https://npm.tfl.dev/@microsoft/fast-element@beta";
 import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.ts";
 import UniversalRouter from "https://npm.tfl.dev/universal-router@9";
+import { setConfig } from "https://tfl.dev/@truffle/config@^1.0.0/index.ts";
 import { AsyncLocalStorage } from "node:async_hooks";
 // NOTE: importing cjs will fail in this file (eg express for types)
 
@@ -21,12 +22,11 @@ const { templateRenderer, defaultRenderInfo, elementRenderer } = fastSSR();
 // url imports can't import non-url imports, so we have to pass this in...
 globalContext._PRIVATE_setInstance(new AsyncLocalStorage());
 
+setConfig(serverConfig);
+
 export function render(req, res, options) {
   const url = req.originalUrl;
-  const initialServerContext = {
-    config: { ...clientConfig, ...serverConfig },
-    ssr: { req, res },
-  };
+  const initialServerContext = { ssr: { req, res } };
 
   return new Promise((resolve) => {
     globalContext.run(initialServerContext, async () => {
