@@ -38,7 +38,7 @@ export async function getInitialClientData(
     packageId: domain?.packageId,
   };
   // set context now so anything in followed fns can use it
-  Object.assign(context, context);
+  Object.assign(context, clientContext);
   const routes = await getNestedRoutes({ domain });
 
   return {
