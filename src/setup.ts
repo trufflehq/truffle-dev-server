@@ -8,9 +8,9 @@ const DEFAULT_MYCELIUM_API_URL = "https://mycelium.staging.bio";
 
 // NOTE: this gets injected into dom for client, so DO NOT put anything secret in here!!!
 export const clientConfig = {
-  IS_DEV_ENV: serverEnv.NODE_ENV === "development",
+  IS_DEV_ENV: serverEnv.NODE_ENV !== "production",
   IS_STAGING_ENV: false,
-  IS_PROD_ENV: serverEnv.NODE_ENV !== "development",
+  IS_PROD_ENV: serverEnv.NODE_ENV === "production",
   PUBLIC_API_URL: serverEnv.PUBLIC_MYCELIUM_API_URL || DEFAULT_MYCELIUM_API_URL,
   API_URL: serverEnv.PUBLIC_MYCELIUM_API_URL || DEFAULT_MYCELIUM_API_URL,
   HOST: serverEnv.SPOROCARP_HOST || "dev.sporocarp.dev",
@@ -25,10 +25,11 @@ export async function getInitialClientData(
   { req, res, options, clientConfig },
 ) {
   const context = globalContext.getStore();
+
   const { getDomain, getNestedRoutes } = await import(
-    serverEnv.NODE_ENV === "development"
-      ? "./setup.local.ts"
-      : "./setup.hosted.ts"
+    serverEnv.NODE_ENV === "production"
+      ? "./setup.hosted.ts"
+      : "./setup.local.ts"
   );
   const domain = await getDomain(req, options);
 
