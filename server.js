@@ -4,8 +4,8 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 // TODO: add .vue file support (will need to do same in oscar)
 // atm the plugin imports from 'vue' and doesn't let us specify url instead
-// so would need that fixed
-// import vue from '@vitejs/plugin-vue'
+// so would need that fixed. until then have to use a package.json
+import vue from '@vitejs/plugin-vue'
 
 const PORT = process.env.SPOROCARP_PORT || 8000;
 
@@ -14,7 +14,7 @@ export async function startServer(options) {
   const vite = await createViteServer({
     appType: "custom",
     logLevel: "silent",
-    // plugins: [vue()],
+    plugins: [vue()],
     ssr: { external: ['glob'] }, // errors w/o this
     server: {
       hmr: process.env.NODE_ENV !== "production",

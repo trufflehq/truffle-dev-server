@@ -27,12 +27,10 @@ export async function getDomain(req, { packageVersion }) {
   const domain = response.data?.domainConnection.nodes[0];
 
   if (!domain) {
-    const context = globalContext.getStore();
     console.warn(
       "Domain not found:",
       packageVersion.id,
-      JSON.stringify(context.config, null, 2),
-      response.error?.message,
+      response.error,
     );
   }
 
