@@ -1,5 +1,5 @@
 import fs from "fs";
-import fg from "glob";
+import glob from "glob";
 // import { existsSync } from "https://deno.land/std@0.144.0/fs/mod.ts";
 // import glob from "https://npm.tfl.dev/glob@8";
 
@@ -24,7 +24,7 @@ type Route = {
 };
 
 function getRoutes() {
-  return fg
+  return glob
     // only match directories
     .sync(`**/*/`, { cwd: DIR })
     .map((filename: string) => ({
@@ -50,11 +50,12 @@ function getNestedRoute(
 
   const depth = path.match(/\//g)?.length || 0;
 
-  const pageModuleUrl = existsSync(`${DIR}/${route?.filename || ""}page.tsx`) &&
-    `${DIR}/${route?.filename || ""}page.tsx`;
-  const layoutModuleUrl =
-    existsSync(`${DIR}/${route?.filename || ""}layout.tsx`) &&
-    `${DIR}/${route?.filename || ""}layout.tsx`;
+  const dir = `${DIR}/${route?.filename || ""}`;
+  const pageFile = glob.sync("page.{js,jsx,ts,tsx}", { cwd: dir })?.[0];
+  const layoutFile = glob.sync("layout.{js,jsx,ts,tsx}", { cwd: dir })?.[0];
+
+  const pageModuleUrl = pageFile && `${dir}${pageFile}`;
+  const layoutModuleUrl = layoutFile && `${dir}${layoutFile}`;
 
   const children = getChildren({ routes, parentPath: path, depth });
 
