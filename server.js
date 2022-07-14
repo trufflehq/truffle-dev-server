@@ -14,7 +14,13 @@ export async function startServer(options) {
   const vite = await createViteServer({
     appType: "custom",
     logLevel: "silent",
-    plugins: [vue()],
+    plugins: [vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: tag => tag.startsWith('tfl-')
+        }
+      }
+    })],
     ssr: { external: ['glob'] }, // errors w/o this
     server: {
       hmr: process.env.NODE_ENV !== "production",
