@@ -92,6 +92,7 @@ async function getHtml(url: string, initialClientData) {
     <head>
       <meta charset="UTF-8">
       <title></title>
+      <script async src="https://unpkg.com/construct-style-sheets-polyfill@3.1.0/dist/adoptedStyleSheets.js"></script>
     </head>
     <body>
       ${themeTemplate || ""}
