@@ -14,6 +14,8 @@
     "@vitejs/plugin-vue": "^3.0.0",
     "express": "^4.18.1",
     "glob": "^8.0.3",
+    "jscodeshift": "^0.13.1",
+    "sass": "^1.53.0",
     "typescript": "^4.7.4",
     "vite": "github:trufflehq/vite-url-imports-package"
   }

@@ -7,6 +7,8 @@ import { createServer as createViteServer } from "vite";
 // so would need that fixed. until then have to use a package.json
 import vue from "@vitejs/plugin-vue";
 
+import { viteSassToCss } from "./src/utils/sass.js";
+
 const PORT = process.env.SPOROCARP_PORT || 8000;
 
 // truffle-cli passes in { packageVersion } (for getting org, etc... with setup.lcal)
@@ -17,6 +19,7 @@ export async function startServer(options) {
       appType: "custom",
       logLevel: "silent",
       plugins: [
+        viteSassToCss(),
         // https://shoelace.style/frameworks/vue?id=configuration
         vue({
           template: {
