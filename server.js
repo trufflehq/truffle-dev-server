@@ -11,28 +11,31 @@ const PORT = process.env.SPOROCARP_PORT || 8000;
 
 // truffle-cli passes in { packageVersion } (for getting org, etc... with setup.lcal)
 export async function startServer(options) {
-  const vite = await createViteServer({
-    appType: "custom",
-    logLevel: "silent",
-    plugins: [
-      // https://shoelace.style/frameworks/vue?id=configuration
-      vue({
-        template: {
-          compilerOptions: {
-            isCustomElement: tag => tag.startsWith('tfl-')
+  let vite
+  if (process.env.NODE_ENV !== "production") {
+    vite = await createViteServer({
+      appType: "custom",
+      logLevel: "silent",
+      plugins: [
+        // https://shoelace.style/frameworks/vue?id=configuration
+        vue({
+          template: {
+            compilerOptions: {
+              isCustomElement: tag => tag.startsWith('tfl-')
+            }
           }
-        }
-      })
-    ],
-    ssr: { external: ['glob'] }, // errors w/o this
-    server: {
-      hmr: process.env.NODE_ENV !== "production",
-      middlewareMode: true,
-      // FIXME: I think we might be able to disable when this package is installed via hosted github
-      // (vs installed from local)
-      fs: { strict: false }
-    },
-  });
+        })
+      ],
+      ssr: { external: ['glob'] }, // errors w/o this
+      server: {
+        hmr: process.env.NODE_ENV !== "production",
+        middlewareMode: true,
+        // FIXME: I think we might be able to disable when this package is installed via hosted github
+        // (vs installed from local)
+        fs: { strict: false }
+      },
+    });
+  }
 
   const app = express();
 
