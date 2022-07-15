@@ -60,7 +60,7 @@ const l = process.env, u = "https://mycelium.staging.bio", E = {
   API_URL: l.MYCELIUM_API_URL || u
 };
 async function W({ req: t, res: e, options: c, clientConfig: r }) {
-  const n = d.getStore(), { getDomain: a, getNestedRoutes: i } = await (l.NODE_ENV === "production" ? import("./setup.hosted.b019efc0.js") : import("./setup.local.0a93d76c.js")), o = await a(t, c), m = {
+  const n = d.getStore(), { getDomain: a, getNestedRoutes: i } = await (l.NODE_ENV === "production" ? import("./setup.hosted.js") : import("./setup.local.js")), o = await a(t, c), m = {
     orgId: o == null ? void 0 : o.orgId,
     packageVersionId: o == null ? void 0 : o.packageVersionId,
     packageId: o == null ? void 0 : o.packageId

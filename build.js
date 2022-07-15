@@ -11,6 +11,11 @@
       },
       rollupOptions: {
         external: ['node:async_hooks'],
+        output: {
+          entryFileNames: `[name].js`,
+          chunkFileNames: `[name].js`,
+          assetFileNames: `[name].[ext]`
+        }
       },
     },
   });
@@ -26,6 +31,11 @@
       },
       rollupOptions: {
         external: ['node:async_hooks'],
+        output: {
+          entryFileNames: `[name].js`,
+          chunkFileNames: `[name].js`,
+          assetFileNames: `[name].[ext]`
+        }
       },
     },
   });
