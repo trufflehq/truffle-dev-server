@@ -9,18 +9,59 @@ import vue from '@vitejs/plugin-vue'
 
 const PORT = process.env.SPOROCARP_PORT || 8000;
 
+// vite converts css to js, which breaks import ... assert 'css'
+export default function sendRawCss() {
+  return {
+    name: 'send-raw-css',
+    // vite 2 approach, before vite supported import asserts
+    // worked, but ff had issues (es import shim didn't work with vue)
+    // configureServer(server) {
+    //   server.middlewares.use((req, res, next) => {
+    //     if (req.url.match(/\.css$/)) {
+    //       const filename = path.join(process.cwd(), req.url)
+    //       const css = fs.readFileSync(filename)
+    //       res.status(200).set({ 'Content-Type': 'text/css' }).end(css)
+    //       return
+    //     }
+    //     return next()
+    //   })
+    // }
+    
+    // vite 3 approach
+    enforce: 'post',
+    transform(src, id) {
+      if (id.match(/\.css$/)) {
+        // vite doesn't export a CSSStyleSheet like they should...
+        // it just exports the raw css str
+        src = src.replace(
+          'export default __vite__css',
+          `const styleSheet = new CSSStyleSheet(); styleSheet.replaceSync(__vite__css); export default styleSheet`
+        )
+        return {
+          code: src,
+          map: null // provide source map if available
+        }
+      }
+    }
+  }
+}
+
 // truffle-cli passes in { packageVersion } (for getting org, etc... with setup.lcal)
 export async function startServer(options) {
   const vite = await createViteServer({
     appType: "custom",
     logLevel: "silent",
-    plugins: [vue({
-      template: {
-        compilerOptions: {
-          isCustomElement: tag => tag.startsWith('tfl-')
+    plugins: [
+      sendRawCss(),
+      // https://shoelace.style/frameworks/vue?id=configuration
+      vue({
+        template: {
+          compilerOptions: {
+            isCustomElement: tag => tag.startsWith('tfl-')
+          }
         }
-      }
-    })],
+      })
+    ],
     ssr: { external: ['glob'] }, // errors w/o this
     server: {
       hmr: process.env.NODE_ENV !== "production",
