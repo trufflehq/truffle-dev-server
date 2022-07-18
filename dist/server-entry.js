@@ -1,122 +1,120 @@
 import "https://npm.tfl.dev/@microsoft/fast-ssr/install-dom-shim";
-import y from "https://npm.tfl.dev/@microsoft/fast-ssr@1.0.0-beta.4";
-import { html as L } from "https://npm.tfl.dev/@microsoft/fast-element@2.0.0-beta.3";
-import d from "https://tfl.dev/@truffle/global-context@^1.0.0/index.ts";
-import v from "https://npm.tfl.dev/universal-router@9";
-import { setConfig as G } from "https://tfl.dev/@truffle/config@^1.0.0/index.ts";
-import { AsyncLocalStorage as _ } from "node:async_hooks";
-import { setParams as h } from "https://tfl.dev/@truffle/router@^1.0.0/index.ts";
-var f, C;
-const V = typeof document > "u" || ((C = (f = globalThis == null ? void 0 : globalThis.process) == null ? void 0 : f.release) == null ? void 0 : C.name) === "node";
-function R(t) {
+import R from "https://npm.tfl.dev/@microsoft/fast-ssr@1.0.0-beta.4";
+import m from "https://tfl.dev/@truffle/global-context@^1.0.0/index.ts";
+import Z from "https://npm.tfl.dev/universal-router@9";
+import { setConfig as h } from "https://tfl.dev/@truffle/config@^1.0.0/index.ts";
+import { AsyncLocalStorage as L } from "node:async_hooks";
+import { setParams as I } from "https://tfl.dev/@truffle/router@^1.0.0/index.ts";
+var b, g;
+const y = typeof document > "u" || ((g = (b = globalThis == null ? void 0 : globalThis.process) == null ? void 0 : b.release) == null ? void 0 : g.name) === "node";
+function C(t) {
   return {
     ...t,
     path: t.path === "/*" ? "" : t.path,
-    action: V ? w : S,
-    children: t.path === "/*" ? [] : t.children.map(R)
+    action: y ? V : G,
+    children: t.path === "/*" ? [] : t.children.map(C)
   };
 }
-async function S(t) {
-  const { route: e, params: c } = t;
-  h(c);
-  const r = await t.next();
+async function G(t) {
+  const { route: e, params: a } = t;
+  I(a);
+  const o = await t.next();
   let n;
   if (e.moduleUrl) {
-    const { default: a } = await import(
+    const { default: c } = await import(
       /* @vite-ignore */
       e.moduleUrl.replace(/^\./, "")
     ) || {};
-    return n = document.querySelector(`${a.tagName}#${p(e)}`) || document.createElement(a.tagName), n.id = p(e), r && n.replaceChildren(r), n;
+    return n = document.querySelector(`${c.tagName}#${p(e)}`) || document.createElement(c.tagName), n.id = p(e), o && n.replaceChildren(o), n;
   }
-  return r;
+  return o;
 }
-async function w(t) {
-  var i;
-  const { route: e, params: c } = t;
-  h(c);
-  let r = "", n;
-  e.moduleUrl && (n = (i = await import(
+async function V(t) {
+  var s;
+  const { route: e, params: a } = t;
+  I(a);
+  let o = "", n;
+  e.moduleUrl && (n = (s = await import(
     /* @vite-ignore */
     e.moduleUrl.replace(/^\./, "")
-  )) == null ? void 0 : i.default, r += `<${n.tagName} id="${p(e)}">`);
-  const a = await t.next();
-  return a && (r += a), n && (r += `</${n.tagName}>`), r || null;
+  )) == null ? void 0 : s.default, o += `<${n.tagName} id="${p(e)}">`);
+  const c = await t.next();
+  return c && (o += c), n && (o += `</${n.tagName}>`), o || null;
 }
-function N(t = "") {
+function v(t = "") {
   return (t.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g) || []).join("-").toLowerCase();
 }
 function p(t) {
-  return `module-${N(t.fullPath)}`;
+  return `module-${v(t.fullPath)}`;
 }
-const l = process.env, u = "https://mycelium.staging.bio", E = {
-  IS_DEV_ENV: l.NODE_ENV !== "production",
+const i = process.env, u = "https://mycelium.staging.bio", S = {
+  IS_DEV_ENV: i.NODE_ENV !== "production",
   IS_STAGING_ENV: !1,
-  IS_PROD_ENV: l.NODE_ENV === "production",
-  PUBLIC_API_URL: l.PUBLIC_MYCELIUM_API_URL || u,
-  API_URL: l.PUBLIC_MYCELIUM_API_URL || u,
-  HOST: l.SPOROCARP_HOST || "dev.sporocarp.dev"
-}, U = {
-  PUBLIC_API_URL: l.PUBLIC_MYCELIUM_API_URL || u,
-  API_URL: l.MYCELIUM_API_URL || u
+  IS_PROD_ENV: i.NODE_ENV === "production",
+  PUBLIC_API_URL: i.PUBLIC_MYCELIUM_API_URL || u,
+  API_URL: i.PUBLIC_MYCELIUM_API_URL || u,
+  HOST: i.SPOROCARP_HOST || "dev.sporocarp.dev"
+}, w = {
+  PUBLIC_API_URL: i.PUBLIC_MYCELIUM_API_URL || u,
+  API_URL: i.MYCELIUM_API_URL || u
 };
-async function W({ req: t, res: e, options: c, clientConfig: r }) {
-  const n = d.getStore(), { getDomain: a, getNestedRoutes: i } = await (l.NODE_ENV === "production" ? import("./setup.hosted.js") : import("./setup.local.js")), o = await a(t, c), m = {
-    orgId: o == null ? void 0 : o.orgId,
-    packageVersionId: o == null ? void 0 : o.packageVersionId,
-    packageId: o == null ? void 0 : o.packageId
+async function N({ req: t, res: e, options: a, clientConfig: o }) {
+  const n = m.getStore(), { getDomain: c, getNestedRoutes: s } = await (i.NODE_ENV === "production" ? import("./setup.hosted.js") : import("./setup.local.js")), r = await c(t, a), l = {
+    orgId: r == null ? void 0 : r.orgId,
+    packageVersionId: r == null ? void 0 : r.packageVersionId,
+    packageId: r == null ? void 0 : r.packageId
   };
-  Object.assign(n, m);
-  const s = await i({ domain: o });
+  Object.assign(n, l);
+  const d = await s({ domain: r });
   return {
-    clientConfig: r,
-    routes: s,
-    clientContext: m
+    clientConfig: o,
+    routes: d,
+    clientContext: l
   };
 }
-var g = Object.freeze, A = Object.defineProperty, Y = (t, e) => g(A(t, "raw", { value: g(e || t.slice()) })), I;
-const { templateRenderer: P, defaultRenderInfo: B, elementRenderer: X } = y();
-d._PRIVATE_setInstance(new _());
-G(U);
-function T(t, e, c) {
-  const r = t.originalUrl, n = { ssr: { req: t, res: e } };
-  return new Promise((a) => {
-    d.run(n, async () => {
-      const i = d.getStore();
-      let o;
+const { templateRenderer: _, defaultRenderInfo: E, elementRenderer: H } = R();
+m._PRIVATE_setInstance(new L());
+h(w);
+function F(t, e, a) {
+  const o = t.originalUrl, n = { ssr: { req: t, res: e } };
+  return new Promise((c) => {
+    m.run(n, async () => {
+      const s = m.getStore();
+      let r;
       try {
-        o = await W({
+        r = await N({
           req: t,
           res: e,
-          options: c,
-          clientConfig: E
-        }), Object.assign(i, o);
-      } catch (s) {
-        console.error("Initial context error", s);
+          options: a,
+          clientConfig: S
+        }), Object.assign(s, r);
+      } catch (d) {
+        console.error("Initial context error", d);
       }
-      const m = await J(r, o);
+      let l = await U(o, r);
       try {
-        const s = P.render(m, {
-          ...B
+        const d = _.render(l, {
+          ...E
         });
-        let b = "";
-        for (const Z of s)
-          b += Z;
-        a(b);
-      } catch (s) {
-        console.error("Render error", s), a(m);
+        l = "";
+        for (const f of d)
+          l += f;
+        c(l);
+      } catch (d) {
+        console.error("Render error", d), c(l);
       }
     });
   });
 }
-async function J(t, e) {
-  let c;
+async function U(t, e) {
+  let a;
   try {
-    c = await new v(e.routes.map(R)).resolve(t);
-  } catch (a) {
-    console.log("Base HTML error", a.message), c = "";
+    a = await new Z(e.routes.map(C)).resolve(t);
+  } catch (c) {
+    console.log("Base HTML error", c.message), a = "";
   }
-  const { default: r } = await import("https://tfl.dev/@truffle/ui@~0.0.3/components/theme/theme-template.ts"), n = process.env.NODE_ENV === "production" ? "/client-entry.js" : new URL("data:video/mp2t;base64,aW1wb3J0IGdsb2JhbENvbnRleHQgZnJvbSAiaHR0cHM6Ly90ZmwuZGV2L0B0cnVmZmxlL2dsb2JhbC1jb250ZXh0QF4xLjAuMC9pbmRleC50cyI7CmltcG9ydCB7IHNldENvbmZpZyB9IGZyb20gImh0dHBzOi8vdGZsLmRldi9AdHJ1ZmZsZS9jb25maWdAXjEuMC4wL2luZGV4LnRzIjsKaW1wb3J0IGhpc3RvcnkgZnJvbSAiaHR0cHM6Ly9ucG0udGZsLmRldi9oaXN0b3J5QDUvYnJvd3NlciI7CmltcG9ydCBVbml2ZXJzYWxSb3V0ZXIgZnJvbSAiaHR0cHM6Ly9ucG0udGZsLmRldi91bml2ZXJzYWwtcm91dGVyQDkiOwoKaW1wb3J0IHsgYWRkUm91dGVBY3Rpb24gfSBmcm9tICIuL3JvdXRlci50cyI7Cgpjb25zdCB7IGNsaWVudENvbmZpZywgY2xpZW50Q29udGV4dCwgcm91dGVzIH0gPSB3aW5kb3cuX3RydWZmbGVJbml0aWFsRGF0YTsKCmdsb2JhbENvbnRleHQuc2V0R2xvYmFsVmFsdWUoY2xpZW50Q29udGV4dCB8fCB7fSk7CnNldENvbmZpZyhjbGllbnRDb25maWcgfHwge30pOwoKY29uc3Qgcm91dGVyID0gbmV3IFVuaXZlcnNhbFJvdXRlcihyb3V0ZXMubWFwKGFkZFJvdXRlQWN0aW9uKSk7CgpoaXN0b3J5Lmxpc3RlbihoYW5kbGVSb3V0ZSk7Cgphc3luYyBmdW5jdGlvbiBoYW5kbGVSb3V0ZSh7IGxvY2F0aW9uLCBhY3Rpb24gPSAiIiB9KSB7CiAgY29uc3QgZWxlbWVudCA9IGF3YWl0IHJvdXRlci5yZXNvbHZlKGxvY2F0aW9uLnBhdGhuYW1lKTsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgicm9vdCIpLnJlcGxhY2VDaGlsZHJlbihlbGVtZW50KTsKfQoKaGFuZGxlUm91dGUoeyBsb2NhdGlvbjogd2luZG93LmxvY2F0aW9uIH0pOwo=", self.location).toString().replace("file://", "");
-  return L(I || (I = Y([`<!DOCTYPE html>
+  const { default: o } = await import("https://tfl.dev/@truffle/ui@~0.1.0/components/theme/theme-template.ts"), n = process.env.NODE_ENV === "production" ? "/client-entry.js" : new URL("data:video/mp2t;base64,aW1wb3J0IGdsb2JhbENvbnRleHQgZnJvbSAiaHR0cHM6Ly90ZmwuZGV2L0B0cnVmZmxlL2dsb2JhbC1jb250ZXh0QF4xLjAuMC9pbmRleC50cyI7CmltcG9ydCB7IHNldENvbmZpZyB9IGZyb20gImh0dHBzOi8vdGZsLmRldi9AdHJ1ZmZsZS9jb25maWdAXjEuMC4wL2luZGV4LnRzIjsKaW1wb3J0IGhpc3RvcnkgZnJvbSAiaHR0cHM6Ly9ucG0udGZsLmRldi9oaXN0b3J5QDUvYnJvd3NlciI7CmltcG9ydCBVbml2ZXJzYWxSb3V0ZXIgZnJvbSAiaHR0cHM6Ly9ucG0udGZsLmRldi91bml2ZXJzYWwtcm91dGVyQDkiOwoKaW1wb3J0IHsgYWRkUm91dGVBY3Rpb24gfSBmcm9tICIuL3JvdXRlci50cyI7Cgpjb25zdCB7IGNsaWVudENvbmZpZywgY2xpZW50Q29udGV4dCwgcm91dGVzIH0gPSB3aW5kb3cuX3RydWZmbGVJbml0aWFsRGF0YTsKCmdsb2JhbENvbnRleHQuc2V0R2xvYmFsVmFsdWUoY2xpZW50Q29udGV4dCB8fCB7fSk7CnNldENvbmZpZyhjbGllbnRDb25maWcgfHwge30pOwoKY29uc3Qgcm91dGVyID0gbmV3IFVuaXZlcnNhbFJvdXRlcihyb3V0ZXMubWFwKGFkZFJvdXRlQWN0aW9uKSk7CgpoaXN0b3J5Lmxpc3RlbihoYW5kbGVSb3V0ZSk7Cgphc3luYyBmdW5jdGlvbiBoYW5kbGVSb3V0ZSh7IGxvY2F0aW9uLCBhY3Rpb24gPSAiIiB9KSB7CiAgY29uc3QgZWxlbWVudCA9IGF3YWl0IHJvdXRlci5yZXNvbHZlKGxvY2F0aW9uLnBhdGhuYW1lKTsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgicm9vdCIpLnJlcGxhY2VDaGlsZHJlbihlbGVtZW50KTsKfQoKaGFuZGxlUm91dGUoeyBsb2NhdGlvbjogd2luZG93LmxvY2F0aW9uIH0pOwo=", self.location).toString().replace("file://", "");
+  return `<!DOCTYPE html>
     <html lang="en">
     <head>
       <meta charset="UTF-8">
@@ -124,13 +122,13 @@ async function J(t, e) {
       <script async src="https://unpkg.com/construct-style-sheets-polyfill@3.1.0/dist/adoptedStyleSheets.js"><\/script>
     </head>
     <body>
-      `, `
-      <div id="root">`, `</div>
-      <script type="module" src="`, `"><\/script>
-      <script>window._truffleInitialData = `, `<\/script>
+      ${o || ""}
+      <div id="root">${a || ""}</div>
+      <script type="module" src="${n}"><\/script>
+      <script>window._truffleInitialData = ${JSON.stringify(e || "{}")}<\/script>
     </body>
-    </html>`])), r || "", c || "", n, JSON.stringify(e || "{}"));
+    </html>`;
 }
 export {
-  T as render
+  F as render
 };
