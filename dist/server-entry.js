@@ -45,7 +45,7 @@ function v(t = "") {
   return (t.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g) || []).join("-").toLowerCase();
 }
 function p(t) {
-  return `module-${v(t.fullPath)}`;
+  return `module-${v(t.moduleUrl)}`;
 }
 const i = process.env, u = "https://mycelium.staging.bio", S = {
   IS_DEV_ENV: i.NODE_ENV !== "production",
@@ -72,7 +72,7 @@ async function N({ req: t, res: e, options: a, clientConfig: o }) {
     clientContext: l
   };
 }
-const { templateRenderer: _, defaultRenderInfo: E, elementRenderer: H } = R();
+const { templateRenderer: U, defaultRenderInfo: _, elementRenderer: H } = R();
 m._PRIVATE_setInstance(new L());
 h(w);
 function F(t, e, a) {
@@ -91,10 +91,10 @@ function F(t, e, a) {
       } catch (d) {
         console.error("Initial context error", d);
       }
-      let l = await U(o, r);
+      let l = await E(o, r);
       try {
-        const d = _.render(l, {
-          ...E
+        const d = U.render(l, {
+          ..._
         });
         l = "";
         for (const f of d)
@@ -106,7 +106,7 @@ function F(t, e, a) {
     });
   });
 }
-async function U(t, e) {
+async function E(t, e) {
   let a;
   try {
     a = await new Z(e.routes.map(C)).resolve(t);

@@ -81,5 +81,5 @@ function kebabCase(str = ""): string {
 }
 
 function getDomId(route) {
-  return `module-${kebabCase(route.fullPath)}`;
+  return `module-${kebabCase(route.moduleUrl)}`;
 }
