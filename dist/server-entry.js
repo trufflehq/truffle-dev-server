@@ -1,6 +1,6 @@
 import "https://npm.tfl.dev/@microsoft/fast-ssr/install-dom-shim";
-import y from "https://npm.tfl.dev/@microsoft/fast-ssr";
-import { html as L } from "https://npm.tfl.dev/@microsoft/fast-element@beta";
+import y from "https://npm.tfl.dev/@microsoft/fast-ssr@1.0.0-beta.4";
+import { html as L } from "https://npm.tfl.dev/@microsoft/fast-element@2.0.0-beta.3";
 import d from "https://tfl.dev/@truffle/global-context@^1.0.0/index.ts";
 import v from "https://npm.tfl.dev/universal-router@9";
 import { setConfig as G } from "https://tfl.dev/@truffle/config@^1.0.0/index.ts";

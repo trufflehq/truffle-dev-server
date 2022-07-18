@@ -1,6 +1,6 @@
 import "https://npm.tfl.dev/@microsoft/fast-ssr/install-dom-shim";
-import fastSSR from "https://npm.tfl.dev/@microsoft/fast-ssr";
-import { html } from "https://npm.tfl.dev/@microsoft/fast-element@beta";
+import fastSSR from "https://npm.tfl.dev/@microsoft/fast-ssr@1.0.0-beta.4";
+import { html } from "https://npm.tfl.dev/@microsoft/fast-element@2.0.0-beta.3";
 import globalContext from "https://tfl.dev/@truffle/global-context@^1.0.0/index.ts";
 import UniversalRouter from "https://npm.tfl.dev/universal-router@9";
 import { setConfig } from "https://tfl.dev/@truffle/config@^1.0.0/index.ts";
@@ -46,26 +46,27 @@ export function render(req, res, options) {
         console.error("Initial context error", err);
       }
 
-      const html = await getHtml(url, initialClientData);
+      let htmlStr = await getHtmlStr(url, initialClientData);
       try {
-        const result = templateRenderer.render(html, {
+        const result = templateRenderer.render(htmlStr, {
           ...defaultRenderInfo,
           // elementRenderers: [elementRenderer, LitElementRenderer],
         });
-        let htmlStr = "";
+        htmlStr = "";
         for (const value of result) {
           htmlStr += value;
         }
         resolve(htmlStr);
       } catch (err) {
         console.error("Render error", err);
-        resolve(html);
+        // FIXME: this should return actual html, not tagged template
+        resolve(htmlStr);
       }
     });
   });
 }
 
-async function getHtml(url: string, initialClientData) {
+async function getHtmlStr(url: string, initialClientData) {
   let componentTemplate;
   try {
     const router = new UniversalRouter(
@@ -87,7 +88,7 @@ async function getHtml(url: string, initialClientData) {
       .toString()
       .replace("file://", "");
 
-  return html`<!DOCTYPE html>
+  return `<!DOCTYPE html>
     <html lang="en">
     <head>
       <meta charset="UTF-8">
