@@ -61,31 +61,31 @@ else
 vt.realpathSync = function(e, r) {
   if (e = Q.resolve(e), r && Object.prototype.hasOwnProperty.call(r, e))
     return r[e];
-  var n = e, i = {}, c = {}, l, g, d, b;
+  var n = e, i = {}, c = {}, l, d, v, b;
   E();
   function E() {
     var w = gt.exec(e);
-    l = w[0].length, g = w[0], d = w[0], b = "", x && !c[d] && (B.lstatSync(d), c[d] = !0);
+    l = w[0].length, d = w[0], v = w[0], b = "", x && !c[v] && (B.lstatSync(v), c[v] = !0);
   }
   for (; l < e.length; ) {
     q.lastIndex = l;
     var O = q.exec(e);
-    if (b = g, g += O[0], d = b + O[1], l = q.lastIndex, !(c[d] || r && r[d] === d)) {
+    if (b = d, d += O[0], v = b + O[1], l = q.lastIndex, !(c[v] || r && r[v] === v)) {
       var o;
-      if (r && Object.prototype.hasOwnProperty.call(r, d))
-        o = r[d];
+      if (r && Object.prototype.hasOwnProperty.call(r, v))
+        o = r[v];
       else {
-        var p = B.lstatSync(d);
+        var p = B.lstatSync(v);
         if (!p.isSymbolicLink()) {
-          c[d] = !0, r && (r[d] = d);
+          c[v] = !0, r && (r[v] = v);
           continue;
         }
-        var v = null;
+        var g = null;
         if (!x) {
           var m = p.dev.toString(32) + ":" + p.ino.toString(32);
-          i.hasOwnProperty(m) && (v = i[m]);
+          i.hasOwnProperty(m) && (g = i[m]);
         }
-        v === null && (B.statSync(d), v = B.readlinkSync(d)), o = Q.resolve(b, v), r && (r[d] = o), x || (i[m] = v);
+        g === null && (B.statSync(v), g = B.readlinkSync(v)), o = Q.resolve(b, g), r && (r[v] = o), x || (i[m] = g);
       }
       e = Q.resolve(o, e.slice(l)), E();
     }
@@ -95,22 +95,22 @@ vt.realpathSync = function(e, r) {
 vt.realpath = function(e, r, n) {
   if (typeof n != "function" && (n = ne(r), r = null), e = Q.resolve(e), r && Object.prototype.hasOwnProperty.call(r, e))
     return process.nextTick(n.bind(null, null, r[e]));
-  var i = e, c = {}, l = {}, g, d, b, E;
+  var i = e, c = {}, l = {}, d, v, b, E;
   O();
   function O() {
     var w = gt.exec(e);
-    g = w[0].length, d = w[0], b = w[0], E = "", x && !l[b] ? B.lstat(b, function(A) {
+    d = w[0].length, v = w[0], b = w[0], E = "", x && !l[b] ? B.lstat(b, function(A) {
       if (A)
         return n(A);
       l[b] = !0, o();
     }) : process.nextTick(o);
   }
   function o() {
-    if (g >= e.length)
+    if (d >= e.length)
       return r && (r[i] = e), n(null, e);
-    q.lastIndex = g;
+    q.lastIndex = d;
     var w = q.exec(e);
-    return E = d, d += w[0], b = E + w[1], g = q.lastIndex, l[b] || r && r[b] === b ? process.nextTick(o) : r && Object.prototype.hasOwnProperty.call(r, b) ? m(r[b]) : B.lstat(b, p);
+    return E = v, v += w[0], b = E + w[1], d = q.lastIndex, l[b] || r && r[b] === b ? process.nextTick(o) : r && Object.prototype.hasOwnProperty.call(r, b) ? m(r[b]) : B.lstat(b, p);
   }
   function p(w, A) {
     if (w)
@@ -120,24 +120,24 @@ vt.realpath = function(e, r, n) {
     if (!x) {
       var _ = A.dev.toString(32) + ":" + A.ino.toString(32);
       if (c.hasOwnProperty(_))
-        return v(null, c[_], b);
+        return g(null, c[_], b);
     }
     B.stat(b, function(I) {
       if (I)
         return n(I);
       B.readlink(b, function(a, s) {
-        x || (c[_] = s), v(a, s);
+        x || (c[_] = s), g(a, s);
       });
     });
   }
-  function v(w, A, _) {
+  function g(w, A, _) {
     if (w)
       return n(w);
     var I = Q.resolve(E, A);
     r && (r[_] = I), m(I);
   }
   function m(w) {
-    e = Q.resolve(w, e.slice(g)), O();
+    e = Q.resolve(w, e.slice(d)), O();
   }
 };
 var jt = U;
@@ -193,15 +193,15 @@ function _t(t, e) {
 }
 Dt.range = Mt;
 function Mt(t, e, r) {
-  var n, i, c, l, g, d = r.indexOf(t), b = r.indexOf(e, d + 1), E = d;
-  if (d >= 0 && b > 0) {
+  var n, i, c, l, d, v = r.indexOf(t), b = r.indexOf(e, v + 1), E = v;
+  if (v >= 0 && b > 0) {
     if (t === e)
-      return [d, b];
-    for (n = [], c = r.length; E >= 0 && !g; )
-      E == d ? (n.push(E), d = r.indexOf(t, E + 1)) : n.length == 1 ? g = [n.pop(), b] : (i = n.pop(), i < c && (c = i, l = b), b = r.indexOf(e, E + 1)), E = d < b && d >= 0 ? d : b;
-    n.length && (g = [c, l]);
+      return [v, b];
+    for (n = [], c = r.length; E >= 0 && !d; )
+      E == v ? (n.push(E), v = r.indexOf(t, E + 1)) : n.length == 1 ? d = [n.pop(), b] : (i = n.pop(), i < c && (c = i, l = b), b = r.indexOf(e, E + 1)), E = v < b && v >= 0 ? v : b;
+    n.length && (d = [c, l]);
   }
-  return g;
+  return d;
 }
 var Lt = he, ue = pe, Nt = "\0SLASH" + Math.random() + "\0", Pt = "\0OPEN" + Math.random() + "\0", yt = "\0CLOSE" + Math.random() + "\0", Tt = "\0COMMA" + Math.random() + "\0", Ct = "\0PERIOD" + Math.random() + "\0";
 function it(t) {
@@ -221,8 +221,8 @@ function Gt(t) {
     return t.split(",");
   var n = r.pre, i = r.body, c = r.post, l = n.split(",");
   l[l.length - 1] += "{" + i + "}";
-  var g = Gt(c);
-  return c.length && (l[l.length - 1] += g.shift(), l.push.apply(l, g)), e.push.apply(e, l), e;
+  var d = Gt(c);
+  return c.length && (l[l.length - 1] += d.shift(), l.push.apply(l, d)), e.push.apply(e, l), e;
 }
 function pe(t) {
   return t ? (t.substr(0, 2) === "{}" && (t = "\\{\\}" + t.substr(2)), Z(le(t), !0).map(fe)) : [];
@@ -246,11 +246,11 @@ function Z(t, e) {
   var i = n.pre, c = n.post.length ? Z(n.post, !1) : [""];
   if (/\$$/.test(n.pre))
     for (var l = 0; l < c.length; l++) {
-      var g = i + "{" + n.body + "}" + c[l];
-      r.push(g);
+      var d = i + "{" + n.body + "}" + c[l];
+      r.push(d);
     }
   else {
-    var d = /^-?\d+\.\.-?\d+(?:\.\.-?\d+)?$/.test(n.body), b = /^[a-zA-Z]\.\.[a-zA-Z](?:\.\.-?\d+)?$/.test(n.body), E = d || b, O = n.body.indexOf(",") >= 0;
+    var v = /^-?\d+\.\.-?\d+(?:\.\.-?\d+)?$/.test(n.body), b = /^[a-zA-Z]\.\.[a-zA-Z](?:\.\.-?\d+)?$/.test(n.body), E = v || b, O = n.body.indexOf(",") >= 0;
     if (!E && !O)
       return n.post.match(/,.*\}/) ? (t = n.pre + "{" + n.body + yt + n.post, Z(t)) : [t];
     var o;
@@ -262,11 +262,11 @@ function Z(t, e) {
       });
     var p;
     if (E) {
-      var v = it(o[0]), m = it(o[1]), w = Math.max(o[0].length, o[1].length), A = o.length == 3 ? Math.abs(it(o[2])) : 1, _ = ge, I = m < v;
+      var g = it(o[0]), m = it(o[1]), w = Math.max(o[0].length, o[1].length), A = o.length == 3 ? Math.abs(it(o[2])) : 1, _ = ge, I = m < g;
       I && (A *= -1, _ = me);
       var a = o.some(ve);
       p = [];
-      for (var s = v; _(s, m); s += A) {
+      for (var s = g; _(s, m); s += A) {
         var u;
         if (b)
           u = String.fromCharCode(s), u === "\\" && (u = "");
@@ -286,8 +286,8 @@ function Z(t, e) {
     }
     for (var y = 0; y < p.length; y++)
       for (var l = 0; l < c.length; l++) {
-        var g = i + p[y] + c[l];
-        (!e || E || g) && r.push(g);
+        var d = i + p[y] + c[l];
+        (!e || E || d) && r.push(d);
       }
   }
   return r;
@@ -365,7 +365,7 @@ class rt {
   matchOne(e, r, n) {
     var i = this.options;
     this.debug("matchOne", { this: this, file: e, pattern: r }), this.debug("matchOne", e.length, r.length);
-    for (var c = 0, l = 0, g = e.length, d = r.length; c < g && l < d; c++, l++) {
+    for (var c = 0, l = 0, d = e.length, v = r.length; c < d && l < v; c++, l++) {
       this.debug("matchOne loop");
       var b = r[l], E = e[c];
       if (this.debug(r, b, E), b === !1)
@@ -373,17 +373,17 @@ class rt {
       if (b === N) {
         this.debug("GLOBSTAR", [r, b, E]);
         var O = c, o = l + 1;
-        if (o === d) {
-          for (this.debug("** at the end"); c < g; c++)
+        if (o === v) {
+          for (this.debug("** at the end"); c < d; c++)
             if (e[c] === "." || e[c] === ".." || !i.dot && e[c].charAt(0) === ".")
               return !1;
           return !0;
         }
-        for (; O < g; ) {
+        for (; O < d; ) {
           var p = e[O];
           if (this.debug(`
 globstar while`, e, O, r, o, p), this.matchOne(e.slice(O), r.slice(o), n))
-            return this.debug("globstar found match!", O, g, p), !0;
+            return this.debug("globstar found match!", O, d, p), !0;
           if (p === "." || p === ".." || !i.dot && p.charAt(0) === ".") {
             this.debug("dot detected!", e, O, r, o);
             break;
@@ -391,18 +391,18 @@ globstar while`, e, O, r, o, p), this.matchOne(e.slice(O), r.slice(o), n))
           this.debug("globstar swallow a segment, and continue"), O++;
         }
         return !!(n && (this.debug(`
->>> no match, partial?`, e, O, r, o), O === g));
+>>> no match, partial?`, e, O, r, o), O === d));
       }
-      var v;
-      if (typeof b == "string" ? (v = E === b, this.debug("string match", b, E, v)) : (v = E.match(b), this.debug("pattern match", b, E, v)), !v)
+      var g;
+      if (typeof b == "string" ? (g = E === b, this.debug("string match", b, E, g)) : (g = E.match(b), this.debug("pattern match", b, E, g)), !g)
         return !1;
     }
-    if (c === g && l === d)
+    if (c === d && l === v)
       return !0;
-    if (c === g)
+    if (c === d)
       return n;
-    if (l === d)
-      return c === g - 1 && e[c] === "";
+    if (l === v)
+      return c === d - 1 && e[c] === "";
     throw new Error("wtf?");
   }
   braceExpand() {
@@ -419,8 +419,8 @@ globstar while`, e, O, r, o, p), this.matchOne(e.slice(O), r.slice(o), n))
     if (e === "")
       return "";
     let i = "", c = !!n.nocase, l = !1;
-    const g = [], d = [];
-    let b, E = !1, O = -1, o = -1, p, v, m;
+    const d = [], v = [];
+    let b, E = !1, O = -1, o = -1, p, g, m;
     const w = e.charAt(0) === "." ? "" : n.dot ? "(?!(?:^|\\/)\\.{1,2}(?:$|\\/))" : "(?!\\.)", A = () => {
       if (b) {
         switch (b) {
@@ -470,7 +470,7 @@ globstar while`, e, O, r, o, p), this.matchOne(e.slice(O), r.slice(o), n))
             i += "\\(";
             continue;
           }
-          g.push({
+          d.push({
             type: b,
             start: a - 1,
             reStart: i.length,
@@ -479,14 +479,14 @@ globstar while`, e, O, r, o, p), this.matchOne(e.slice(O), r.slice(o), n))
           }), i += b === "!" ? "(?:(?!(?:" : "(?:", this.debug("plType %j %j", b, i), b = !1;
           continue;
         case ")":
-          if (E || !g.length) {
+          if (E || !d.length) {
             i += "\\)";
             continue;
           }
-          A(), c = !0, v = g.pop(), i += v.close, v.type === "!" && d.push(v), v.reEnd = i.length;
+          A(), c = !0, g = d.pop(), i += g.close, g.type === "!" && v.push(g), g.reEnd = i.length;
           continue;
         case "|":
-          if (E || !g.length) {
+          if (E || !d.length) {
             i += "\\|";
             continue;
           }
@@ -518,17 +518,17 @@ globstar while`, e, O, r, o, p), this.matchOne(e.slice(O), r.slice(o), n))
           break;
       }
     }
-    for (E && (p = e.substr(o + 1), m = this.parse(p, X), i = i.substr(0, O) + "\\[" + m[0], c = c || m[1]), v = g.pop(); v; v = g.pop()) {
+    for (E && (p = e.substr(o + 1), m = this.parse(p, X), i = i.substr(0, O) + "\\[" + m[0], c = c || m[1]), g = d.pop(); g; g = d.pop()) {
       let a;
-      a = i.slice(v.reStart + v.open.length), this.debug("setting tail", i, v), a = a.replace(/((?:\\{2}){0,64})(\\?)\|/g, (u, f, h) => (h || (h = "\\"), f + f + h + "|")), this.debug(`tail=%j
-   %s`, a, a, v, i);
-      const s = v.type === "*" ? st : v.type === "?" ? lt : "\\" + v.type;
-      c = !0, i = i.slice(0, v.reStart) + s + "\\(" + a;
+      a = i.slice(g.reStart + g.open.length), this.debug("setting tail", i, g), a = a.replace(/((?:\\{2}){0,64})(\\?)\|/g, (u, f, h) => (h || (h = "\\"), f + f + h + "|")), this.debug(`tail=%j
+   %s`, a, a, g, i);
+      const s = g.type === "*" ? st : g.type === "?" ? lt : "\\" + g.type;
+      c = !0, i = i.slice(0, g.reStart) + s + "\\(" + a;
     }
     A(), l && (i += "\\\\");
     const _ = we[i.charAt(0)];
-    for (let a = d.length - 1; a > -1; a--) {
-      const s = d[a], u = i.slice(0, s.reStart), f = i.slice(s.reStart, s.reEnd - 8);
+    for (let a = v.length - 1; a > -1; a--) {
+      const s = v[a], u = i.slice(0, s.reStart), f = i.slice(s.reStart, s.reEnd - 8);
       let h = i.slice(s.reEnd);
       const y = i.slice(s.reEnd - 8, s.reEnd) + h, S = u.split("(").length - 1;
       let k = h;
@@ -559,9 +559,9 @@ globstar while`, e, O, r, o, p), this.matchOne(e.slice(O), r.slice(o), n))
     if (!e.length)
       return this.regexp = !1, this.regexp;
     const r = this.options, n = r.noglobstar ? st : r.dot ? be : _e, i = r.nocase ? "i" : "";
-    let c = e.map((l) => (l = l.map((g) => typeof g == "string" ? Oe(g) : g === N ? N : g._src).reduce((g, d) => (g[g.length - 1] === N && d === N || g.push(d), g), []), l.forEach((g, d) => {
-      g !== N || l[d - 1] === N || (d === 0 ? l.length > 1 ? l[d + 1] = "(?:\\/|" + n + "\\/)?" + l[d + 1] : l[d] = n : d === l.length - 1 ? l[d - 1] += "(?:\\/|" + n + ")?" : (l[d - 1] += "(?:\\/|\\/" + n + "\\/)" + l[d + 1], l[d + 1] = N));
-    }), l.filter((g) => g !== N).join("/"))).join("|");
+    let c = e.map((l) => (l = l.map((d) => typeof d == "string" ? Oe(d) : d === N ? N : d._src).reduce((d, v) => (d[d.length - 1] === N && v === N || d.push(v), d), []), l.forEach((d, v) => {
+      d !== N || l[v - 1] === N || (v === 0 ? l.length > 1 ? l[v + 1] = "(?:\\/|" + n + "\\/)?" + l[v + 1] : l[v] = n : v === l.length - 1 ? l[v - 1] += "(?:\\/|" + n + ")?" : (l[v - 1] += "(?:\\/|\\/" + n + "\\/)" + l[v + 1], l[v + 1] = N));
+    }), l.filter((d) => d !== N).join("/"))).join("|");
     c = "^(?:" + c + ")$", this.negate && (c = "^(?!" + c + ").*$");
     try {
       this.regexp = new RegExp(c, i);
@@ -585,9 +585,9 @@ globstar while`, e, O, r, o, p), this.matchOne(e.slice(O), r.slice(o), n))
     for (let l = e.length - 1; l >= 0 && (c = e[l], !c); l--)
       ;
     for (let l = 0; l < i.length; l++) {
-      const g = i[l];
-      let d = e;
-      if (n.matchBase && g.length === 1 && (d = [c]), this.matchOne(d, g, r))
+      const d = i[l];
+      let v = e;
+      if (n.matchBase && d.length === 1 && (v = [c]), this.matchOne(v, d, r))
         return n.flipNegate ? !0 : !this.negate;
     }
     return n.flipNegate ? !1 : this.negate;
@@ -663,22 +663,22 @@ function De(t) {
         e ? r.push(l) : r[l] = !0;
       }
     } else {
-      var g = Object.keys(c);
-      e ? r.push.apply(r, g) : g.forEach(function(d) {
-        r[d] = !0;
+      var d = Object.keys(c);
+      e ? r.push.apply(r, d) : d.forEach(function(v) {
+        r[v] = !0;
       });
     }
   }
   if (e || (r = Object.keys(r)), t.nosort || (r = r.sort(je)), t.mark) {
     for (var n = 0; n < r.length; n++)
       r[n] = t._mark(r[n]);
-    t.nodir && (r = r.filter(function(d) {
-      var b = !/\/$/.test(d), E = t.cache[d] || t.cache[Y(t, d)];
+    t.nodir && (r = r.filter(function(v) {
+      var b = !/\/$/.test(v), E = t.cache[v] || t.cache[Y(t, v)];
       return b && E && (b = E !== "DIR" && !Array.isArray(E)), b;
     }));
   }
-  t.ignore.length && (r = r.filter(function(d) {
-    return !Wt(t, d);
+  t.ignore.length && (r = r.filter(function(v) {
+    return !Wt(t, v);
   })), t.found = r;
 }
 function Me(t, e) {
@@ -686,8 +686,8 @@ function Me(t, e) {
   if (n) {
     var c = n === "DIR" || Array.isArray(n), l = e.slice(-1) === "/";
     if (c && !l ? i += "/" : !c && l && (i = i.slice(0, -1)), i !== e) {
-      var g = Y(t, i);
-      t.statCache[g] = t.statCache[r], t.cache[g] = t.cache[r];
+      var d = Y(t, i);
+      t.statCache[d] = t.statCache[r], t.cache[d] = t.cache[r];
     }
   }
   return i;
@@ -713,7 +713,7 @@ function Ne() {
   Ot = 1, at = E, E.GlobSync = O;
   var t = jt, e = et;
   e.Minimatch, zt().Glob;
-  var r = M, n = M, i = M.isAbsolute, c = C, l = c.setopts, g = c.ownProp, d = c.childrenIgnored, b = c.isIgnored;
+  var r = M, n = M, i = M.isAbsolute, c = C, l = c.setopts, d = c.ownProp, v = c.childrenIgnored, b = c.isIgnored;
   function E(o, p) {
     if (typeof p == "function" || arguments.length === 3)
       throw new TypeError(`callback provided to sync glob
@@ -730,17 +730,17 @@ See: https://github.com/isaacs/node-glob/issues/167`);
       return new O(o, p);
     if (l(this, o, p), this.noprocess)
       return this;
-    var v = this.minimatch.set.length;
-    this.matches = new Array(v);
-    for (var m = 0; m < v; m++)
+    var g = this.minimatch.set.length;
+    this.matches = new Array(g);
+    for (var m = 0; m < g; m++)
       this._process(this.minimatch.set[m], m, !1);
     this._finish();
   }
   return O.prototype._finish = function() {
     if (n.ok(this instanceof O), this.realpath) {
       var o = this;
-      this.matches.forEach(function(p, v) {
-        var m = o.matches[v] = /* @__PURE__ */ Object.create(null);
+      this.matches.forEach(function(p, g) {
+        var m = o.matches[g] = /* @__PURE__ */ Object.create(null);
         for (var w in p)
           try {
             w = o._makeAbs(w);
@@ -755,7 +755,7 @@ See: https://github.com/isaacs/node-glob/issues/167`);
       });
     }
     c.finish(this);
-  }, O.prototype._process = function(o, p, v) {
+  }, O.prototype._process = function(o, p, g) {
     n.ok(this instanceof O);
     for (var m = 0; typeof o[m] == "string"; )
       m++;
@@ -776,12 +776,12 @@ See: https://github.com/isaacs/node-glob/issues/167`);
       return typeof s == "string" ? s : "[*]";
     }).join("/"))) && (!w || !i(w)) && (w = "/" + w), _ = w);
     var I = this._makeAbs(_);
-    if (!d(this, _)) {
+    if (!v(this, _)) {
       var a = A[0] === e.GLOBSTAR;
-      a ? this._processGlobStar(w, _, I, A, p, v) : this._processReaddir(w, _, I, A, p, v);
+      a ? this._processGlobStar(w, _, I, A, p, g) : this._processReaddir(w, _, I, A, p, g);
     }
-  }, O.prototype._processReaddir = function(o, p, v, m, w, A) {
-    var _ = this._readdir(v, A);
+  }, O.prototype._processReaddir = function(o, p, g, m, w, A) {
+    var _ = this._readdir(g, A);
     if (!!_) {
       for (var I = m[0], a = !!this.minimatch.negate, s = I._glob, u = this.dot || s.charAt(0) === ".", f = [], h = 0; h < _.length; h++) {
         var y = _[h];
@@ -809,10 +809,10 @@ See: https://github.com/isaacs/node-glob/issues/167`);
     }
   }, O.prototype._emitMatch = function(o, p) {
     if (!b(this, p)) {
-      var v = this._makeAbs(p);
-      if (this.mark && (p = this._mark(p)), this.absolute && (p = v), !this.matches[o][p]) {
+      var g = this._makeAbs(p);
+      if (this.mark && (p = this._mark(p)), this.absolute && (p = g), !this.matches[o][p]) {
         if (this.nodir) {
-          var m = this.cache[v];
+          var m = this.cache[g];
           if (m === "DIR" || Array.isArray(m))
             return;
         }
@@ -822,24 +822,24 @@ See: https://github.com/isaacs/node-glob/issues/167`);
   }, O.prototype._readdirInGlobStar = function(o) {
     if (this.follow)
       return this._readdir(o, !1);
-    var p, v;
+    var p, g;
     try {
-      v = this.fs.lstatSync(o);
+      g = this.fs.lstatSync(o);
     } catch (w) {
       if (w.code === "ENOENT")
         return null;
     }
-    var m = v && v.isSymbolicLink();
-    return this.symlinks[o] = m, !m && v && !v.isDirectory() ? this.cache[o] = "FILE" : p = this._readdir(o, !1), p;
+    var m = g && g.isSymbolicLink();
+    return this.symlinks[o] = m, !m && g && !g.isDirectory() ? this.cache[o] = "FILE" : p = this._readdir(o, !1), p;
   }, O.prototype._readdir = function(o, p) {
-    if (p && !g(this.symlinks, o))
+    if (p && !d(this.symlinks, o))
       return this._readdirInGlobStar(o);
-    if (g(this.cache, o)) {
-      var v = this.cache[o];
-      if (!v || v === "FILE")
+    if (d(this.cache, o)) {
+      var g = this.cache[o];
+      if (!g || g === "FILE")
         return null;
-      if (Array.isArray(v))
-        return v;
+      if (Array.isArray(g))
+        return g;
     }
     try {
       return this._readdirEntries(o, this.fs.readdirSync(o));
@@ -848,8 +848,8 @@ See: https://github.com/isaacs/node-glob/issues/167`);
     }
   }, O.prototype._readdirEntries = function(o, p) {
     if (!this.mark && !this.stat)
-      for (var v = 0; v < p.length; v++) {
-        var m = p[v];
+      for (var g = 0; g < p.length; g++) {
+        var m = p[g];
         o === "/" ? m = o + m : m = o + "/" + m, this.cache[m] = !0;
       }
     return this.cache[o] = p, p;
@@ -857,8 +857,8 @@ See: https://github.com/isaacs/node-glob/issues/167`);
     switch (p.code) {
       case "ENOTSUP":
       case "ENOTDIR":
-        var v = this._makeAbs(o);
-        if (this.cache[v] = "FILE", v === this.cwdAbs) {
+        var g = this._makeAbs(o);
+        if (this.cache[g] = "FILE", g === this.cwdAbs) {
           var m = new Error(p.code + " invalid cwd " + this.cwd);
           throw m.path = this.cwd, m.code = p.code, m;
         }
@@ -875,12 +875,12 @@ See: https://github.com/isaacs/node-glob/issues/167`);
         this.silent || console.error("glob error", p);
         break;
     }
-  }, O.prototype._processGlobStar = function(o, p, v, m, w, A) {
-    var _ = this._readdir(v, A);
+  }, O.prototype._processGlobStar = function(o, p, g, m, w, A) {
+    var _ = this._readdir(g, A);
     if (!!_) {
       var I = m.slice(1), a = o ? [o] : [], s = a.concat(I);
       this._process(s, w, !1);
-      var u = _.length, f = this.symlinks[v];
+      var u = _.length, f = this.symlinks[g];
       if (!(f && A))
         for (var h = 0; h < u; h++) {
           var y = _[h];
@@ -893,8 +893,8 @@ See: https://github.com/isaacs/node-glob/issues/167`);
         }
     }
   }, O.prototype._processSimple = function(o, p) {
-    var v = this._stat(o);
-    if (this.matches[p] || (this.matches[p] = /* @__PURE__ */ Object.create(null)), !!v) {
+    var g = this._stat(o);
+    if (this.matches[p] || (this.matches[p] = /* @__PURE__ */ Object.create(null)), !!g) {
       if (o && i(o) && !this.nomount) {
         var m = /[\/\\]$/.test(o);
         o.charAt(0) === "/" ? o = r.join(this.root, o) : (o = r.resolve(this.root, o), m && (o += "/"));
@@ -902,14 +902,14 @@ See: https://github.com/isaacs/node-glob/issues/167`);
       process.platform === "win32" && (o = o.replace(/\\/g, "/")), this._emitMatch(p, o);
     }
   }, O.prototype._stat = function(o) {
-    var p = this._makeAbs(o), v = o.slice(-1) === "/";
+    var p = this._makeAbs(o), g = o.slice(-1) === "/";
     if (o.length > this.maxLength)
       return !1;
-    if (!this.stat && g(this.cache, p)) {
+    if (!this.stat && d(this.cache, p)) {
       var A = this.cache[p];
-      if (Array.isArray(A) && (A = "DIR"), !v || A === "DIR")
+      if (Array.isArray(A) && (A = "DIR"), !g || A === "DIR")
         return A;
-      if (v && A === "FILE")
+      if (g && A === "FILE")
         return !1;
     }
     var m = this.statCache[p];
@@ -932,7 +932,7 @@ See: https://github.com/isaacs/node-glob/issues/167`);
     }
     this.statCache[p] = m;
     var A = !0;
-    return m && (A = m.isDirectory() ? "DIR" : "FILE"), this.cache[p] = this.cache[p] || A, v && A === "FILE" ? !1 : A;
+    return m && (A = m.isDirectory() ? "DIR" : "FILE"), this.cache[p] = this.cache[p] || A, g && A === "FILE" ? !1 : A;
   }, O.prototype._mark = function(o) {
     return c.mark(this, o);
   }, O.prototype._makeAbs = function(o) {
@@ -952,8 +952,8 @@ function qt(t, e) {
     for (var n = new Array(arguments.length), i = 0; i < n.length; i++)
       n[i] = arguments[i];
     var c = t.apply(this, n), l = n[n.length - 1];
-    return typeof c == "function" && c !== l && Object.keys(l).forEach(function(g) {
-      c[g] = l[g];
+    return typeof c == "function" && c !== l && Object.keys(l).forEach(function(d) {
+      c[d] = l[d];
     }), c;
   }
 }
@@ -1016,17 +1016,17 @@ function zt() {
   St = 1, ot = m;
   var t = jt, e = et;
   e.Minimatch;
-  var r = ft.exports, n = M.EventEmitter, i = M, c = M, l = M.isAbsolute, g = Ne(), d = C, b = d.setopts, E = d.ownProp, O = Ce, o = d.childrenIgnored, p = d.isIgnored, v = nt.exports;
+  var r = ft.exports, n = M.EventEmitter, i = M, c = M, l = M.isAbsolute, d = Ne(), v = C, b = v.setopts, E = v.ownProp, O = Ce, o = v.childrenIgnored, p = v.isIgnored, g = nt.exports;
   function m(a, s, u) {
     if (typeof s == "function" && (u = s, s = {}), s || (s = {}), s.sync) {
       if (u)
         throw new TypeError("callback provided to sync glob");
-      return g(a, s);
+      return d(a, s);
     }
     return new _(a, s, u);
   }
-  m.sync = g;
-  var w = m.GlobSync = g.GlobSync;
+  m.sync = d;
+  var w = m.GlobSync = d.GlobSync;
   m.glob = m;
   function A(a, s) {
     if (s === null || typeof s != "object")
@@ -1058,7 +1058,7 @@ function zt() {
       return new _(a, s, u);
     b(this, a, s), this._didRealPath = !1;
     var f = this.minimatch.set.length;
-    this.matches = new Array(f), typeof u == "function" && (u = v(u), this.on("error", u), this.on("end", function(j) {
+    this.matches = new Array(f), typeof u == "function" && (u = g(u), this.on("error", u), this.on("end", function(j) {
       u(null, j);
     }));
     var h = this;
@@ -1079,7 +1079,7 @@ function zt() {
     if (c(this instanceof _), !this.aborted) {
       if (this.realpath && !this._didRealpath)
         return this._realpath();
-      d.finish(this), this.emit("end", this.found);
+      v.finish(this), this.emit("end", this.found);
     }
   }, _.prototype._realpath = function() {
     if (this._didRealpath)
@@ -1107,9 +1107,9 @@ function zt() {
       });
     });
   }, _.prototype._mark = function(a) {
-    return d.mark(this, a);
+    return v.mark(this, a);
   }, _.prototype._makeAbs = function(a) {
-    return d.makeAbs(this, a);
+    return v.makeAbs(this, a);
   }, _.prototype.abort = function() {
     this.aborted = !0, this.emit("abort");
   }, _.prototype.pause = function() {
@@ -1365,13 +1365,13 @@ function Ve() {
 }
 function Kt({ route: t, path: e = "", parentPath: r = "" } = {}) {
   var O, o, p;
-  const n = Ue(), i = ((O = e.match(/\//g)) == null ? void 0 : O.length) || 0, c = `${Zt}/${(t == null ? void 0 : t.filename) || ""}`, l = (o = dt.sync("page.{js,jsx,ts,tsx}", { cwd: c })) == null ? void 0 : o[0], g = (p = dt.sync("layout.{js,jsx,ts,tsx}", { cwd: c })) == null ? void 0 : p[0], d = l && `${c}${l}`, b = g && `${c}${g}`, E = We({ routes: n, parentPath: e, depth: i });
-  if (d) {
-    const v = E.findIndex(({ path: w }) => w === `/${bt}`);
-    v !== -1 && (E[v].path = `/${xe}`), E.push({
+  const n = Ue(), i = ((O = e.match(/\//g)) == null ? void 0 : O.length) || 0, c = `${Zt}/${(t == null ? void 0 : t.filename) || ""}`, l = (o = dt.sync("page.{js,jsx,ts,tsx}", { cwd: c })) == null ? void 0 : o[0], d = (p = dt.sync("layout.{js,jsx,ts,tsx}", { cwd: c })) == null ? void 0 : p[0], v = l && `${c}${l}`, b = d && `${c}${d}`, E = We({ routes: n, parentPath: e, depth: i });
+  if (v) {
+    const g = E.findIndex(({ path: w }) => w === `/${bt}`);
+    g !== -1 && (E[g].path = `/${xe}`), E.push({
       fullPath: e,
       path: "",
-      moduleUrl: d,
+      moduleUrl: v,
       depth: i,
       children: []
     });
@@ -1386,8 +1386,8 @@ function Kt({ route: t, path: e = "", parentPath: r = "" } = {}) {
 }
 function We({ routes: t, parentPath: e, depth: r }) {
   return t.filter((n) => {
-    var g;
-    const c = ((g = n.path.match(/\//g)) == null ? void 0 : g.length) === r + 1, l = n.path.indexOf(e) !== -1;
+    var d;
+    const c = ((d = n.path.match(/\//g)) == null ? void 0 : d.length) === r + 1, l = n.path.indexOf(e) !== -1;
     return c && l;
   }).map((n) => Kt({ route: n, path: n.path, parentPath: e })).sort((n, i) => n.path === `/${bt}` ? 1 : -1);
 }
@@ -1403,10 +1403,10 @@ const Qe = Yt`query DomainGetConnection($packageVersionId: ID) {
   }
 }`;
 async function ze(t, { packageVersion: e }) {
-  var l;
+  var l, d;
   if (!e)
     return console.warn("PackageVersion not found, you may need to deploy first"), null;
-  const r = Qe, n = { packageVersionId: e.id }, i = await Xt().query(r, n).toPromise(), c = (l = i.data) == null ? void 0 : l.domainConnection.nodes[0];
+  const r = Qe, n = { packageVersionId: e.id }, i = await Xt().query(r, n).toPromise(), c = (d = (l = i.data) == null ? void 0 : l.domainConnection) == null ? void 0 : d.nodes[0];
   return c || console.warn("Domain not found:", e.id, i.error), c;
 }
 export {
