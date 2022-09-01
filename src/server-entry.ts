@@ -74,7 +74,11 @@ async function getHtmlStr(url: string, initialClientData) {
     );
     componentTemplate = await router.resolve(url);
   } catch (err) {
-    console.log("Base HTML error", err.message);
+    // setAttribute is not a function is bc we use react-dom/client server-side for now.
+    // see todo in router.ts
+    if (err.message.indexOf("setAttribute is not a function") === -1) {
+      console.log("Base HTML error", err.message);
+    }
     componentTemplate = "";
   }
 
