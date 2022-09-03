@@ -1,6 +1,6 @@
 
-  import { build } from "vite";
-  
+const { build } = require("vite");
+(async () => {
   await build({
     build: {
       lib: {
@@ -19,7 +19,7 @@
       },
     },
   });
-  
+
   await build({
     build: {
       emptyOutDir: false,
@@ -39,3 +39,4 @@
       },
     },
   });
+})();

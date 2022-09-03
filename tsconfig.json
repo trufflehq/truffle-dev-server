@@ -11,5 +11,10 @@
     "strict": true,
     "target": "esnext",
     "useDefineForClassFields": true
-  }
+  },
+  "include": [
+    "src",
+    "tsup.config.ts",
+    "server.ts"
+  ]
 }

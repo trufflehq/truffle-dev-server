@@ -2,11 +2,21 @@
   "name": "truffle-dev-server",
   "version": "1.0.0",
   "description": "Until we get better dev platform support on Deno...",
-  "main": "server.js",
-  "type": "module",
+  "main": "dist/server.js",
+  "module": "dist/server.mjs",
+  "type": "commonjs",
+  "exports": {
+    "import": "./dist/server.mjs",
+    "require": "./dist/server.js",
+    "types": "./dist/server.d.ts"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "dev": "node --experimental-import-meta-resolve --experimental-network-imports ./server.js",
-    "build": "node ./build.js"
+    "build": "rimraf dist && node ./build.js && tsup"
   },
   "author": "Truffle",
   "license": "ISC",
@@ -19,5 +29,13 @@
     "typescript": "^4.7.4",
     "vite": "github:trufflehq/vite-url-imports-package",
     "vue": "^3.2.37"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "rimraf": "^3.0.2",
+    "tsup": "^6.2.3"
+  },
+  "volta": {
+    "node": "18.8.0"
   }
 }
