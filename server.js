@@ -8,7 +8,6 @@ import { createServer as createViteServer } from "vite";
 import vue from "@vitejs/plugin-vue";
 
 import { viteSassToCss } from "./src/utils/sass.js";
-
 const PORT = process.env.SPOROCARP_PORT || 8000;
 
 // truffle-cli passes in { packageVersion } (for getting org, etc... with setup.lcal)
@@ -95,3 +94,5 @@ function onExit({ eventType }, err) {
   }
   process.exit();
 }
+
+export { isSassJsFile, replaceSassLiteralWithCssLiteral, viteSassToCss } from './src/utils/sass.js'
