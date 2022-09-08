@@ -1,6 +1,6 @@
 
-const { build } = require("vite");
-(async () => {
+  import { build } from "vite";
+  
   await build({
     build: {
       lib: {
@@ -19,7 +19,7 @@ const { build } = require("vite");
       },
     },
   });
-
+  
   await build({
     build: {
       emptyOutDir: false,
@@ -39,4 +39,3 @@ const { build } = require("vite");
       },
     },
   });
-})();
