@@ -28,6 +28,11 @@ export function render(req, res, options) {
   const url = req.originalUrl;
   const initialServerContext = { ssr: { req, res } };
 
+  // k8s probe
+  if (url === "/.well-known/ping") {
+    return "pong";
+  }
+
   return new Promise((resolve) => {
     globalContext.run(initialServerContext, async () => {
       const context = globalContext.getStore();
