@@ -36,6 +36,10 @@ export async function getNestedRoutes({ domain }) {
     input: { packageVersionId: domain.packageVersionId },
   }).toPromise();
 
+  if (!response.data.routeConnection) {
+    console.log("missing routeConnection", response);
+  }
+
   const routes = response.data.routeConnection.nodes;
 
   const rootRoutes = routes.filter(({ parentId }) => parentId === EMPTY_UUID);
