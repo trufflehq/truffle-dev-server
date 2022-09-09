@@ -18,28 +18,28 @@ function f(t) {
 async function G(t) {
   const { route: e, params: a } = t;
   I(a);
-  const o = await t.next();
-  let n;
+  const n = await t.next();
+  let o;
   if (e.moduleUrl) {
     const { default: r } = await import(
       /* @vite-ignore */
       e.moduleUrl.replace(/^\./, "")
     ) || {};
-    return n = document.querySelector(`${r.tagName}#${p(e)}`) || document.createElement(r.tagName), n.id = p(e), o && n.replaceChildren(o), n;
+    return o = document.querySelector(`${r.tagName}#${p(e)}`) || document.createElement(r.tagName), o.id = p(e), n && o.replaceChildren(n), o;
   }
-  return o;
+  return n;
 }
 async function V(t) {
   var s;
   const { route: e, params: a } = t;
   I(a);
-  let o = "", n;
-  e.moduleUrl && (n = (s = await import(
+  let n = "", o;
+  e.moduleUrl && (o = (s = await import(
     /* @vite-ignore */
     e.moduleUrl.replace(/^\./, "")
-  )) == null ? void 0 : s.default, o += `<${n.tagName} id="${p(e)}">`);
+  )) == null ? void 0 : s.default, n += `<${o.tagName} id="${p(e)}">`);
   const r = await t.next();
-  return r && (o += r), n && (o += `</${n.tagName}>`), o || null;
+  return r && (n += r), o && (n += `</${o.tagName}>`), n || null;
 }
 function v(t = "") {
   return (t.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g) || []).join("-").toLowerCase();
@@ -58,16 +58,16 @@ const l = process.env, u = "https://mycelium.staging.bio", S = {
   PUBLIC_API_URL: l.PUBLIC_MYCELIUM_API_URL || u,
   API_URL: l.MYCELIUM_API_URL || u
 };
-async function N({ req: t, res: e, options: a, clientConfig: o }) {
-  const n = m.getStore(), { getDomain: r, getNestedRoutes: s } = await (l.NODE_ENV === "production" ? import("./setup.hosted.js") : import("./setup.local.js")), c = await r(t, a), i = {
+async function N({ req: t, res: e, options: a, clientConfig: n }) {
+  const o = m.getStore(), { getDomain: r, getNestedRoutes: s } = await (l.NODE_ENV === "production" ? import("./setup.hosted.js") : import("./setup.local.js")), c = await r(t, a), i = {
     orgId: c == null ? void 0 : c.orgId,
     packageVersionId: c == null ? void 0 : c.packageVersionId,
     packageId: c == null ? void 0 : c.packageId
   };
-  Object.assign(n, i);
+  Object.assign(o, i);
   const d = await s({ domain: c });
   return {
-    clientConfig: o,
+    clientConfig: n,
     routes: d,
     clientContext: i
   };
@@ -75,10 +75,10 @@ async function N({ req: t, res: e, options: a, clientConfig: o }) {
 const { templateRenderer: U, defaultRenderInfo: _, elementRenderer: H } = R();
 m._PRIVATE_setInstance(new L());
 h(w);
-function F(t, e, a) {
-  const o = t.originalUrl, n = { ssr: { req: t, res: e } };
-  return new Promise((r) => {
-    m.run(n, async () => {
+function k(t, e, a) {
+  const n = t.originalUrl, o = { ssr: { req: t, res: e } };
+  return n === "/.well-known/ping" ? "pong" : new Promise((r) => {
+    m.run(o, async () => {
       const s = m.getStore();
       let c;
       try {
@@ -91,7 +91,7 @@ function F(t, e, a) {
       } catch (d) {
         console.error("Initial context error", d);
       }
-      let i = await E(o, c);
+      let i = await E(n, c);
       try {
         const d = U.render(i, {
           ..._
@@ -113,7 +113,7 @@ async function E(t, e) {
   } catch (r) {
     r.message.indexOf("setAttribute is not a function") === -1 && console.log("Base HTML error", r.message), a = "";
   }
-  const { default: o } = await import("https://tfl.dev/@truffle/ui@~0.1.0/components/theme/theme-template.ts"), n = process.env.NODE_ENV === "production" ? "/client-entry.js" : new URL("data:video/mp2t;base64,aW1wb3J0IGdsb2JhbENvbnRleHQgZnJvbSAiaHR0cHM6Ly90ZmwuZGV2L0B0cnVmZmxlL2dsb2JhbC1jb250ZXh0QF4xLjAuMC9pbmRleC50cyI7CmltcG9ydCB7IHNldENvbmZpZyB9IGZyb20gImh0dHBzOi8vdGZsLmRldi9AdHJ1ZmZsZS9jb25maWdAXjEuMC4wL2luZGV4LnRzIjsKaW1wb3J0IGhpc3RvcnkgZnJvbSAiaHR0cHM6Ly9ucG0udGZsLmRldi9oaXN0b3J5QDUvYnJvd3NlciI7CmltcG9ydCBVbml2ZXJzYWxSb3V0ZXIgZnJvbSAiaHR0cHM6Ly9ucG0udGZsLmRldi91bml2ZXJzYWwtcm91dGVyQDkiOwoKaW1wb3J0IHsgYWRkUm91dGVBY3Rpb24gfSBmcm9tICIuL3JvdXRlci50cyI7Cgpjb25zdCB7IGNsaWVudENvbmZpZywgY2xpZW50Q29udGV4dCwgcm91dGVzIH0gPSB3aW5kb3cuX3RydWZmbGVJbml0aWFsRGF0YTsKCmdsb2JhbENvbnRleHQuc2V0R2xvYmFsVmFsdWUoY2xpZW50Q29udGV4dCB8fCB7fSk7CnNldENvbmZpZyhjbGllbnRDb25maWcgfHwge30pOwoKY29uc3Qgcm91dGVyID0gbmV3IFVuaXZlcnNhbFJvdXRlcihyb3V0ZXMubWFwKGFkZFJvdXRlQWN0aW9uKSk7CgpoaXN0b3J5Lmxpc3RlbihoYW5kbGVSb3V0ZSk7Cgphc3luYyBmdW5jdGlvbiBoYW5kbGVSb3V0ZSh7IGxvY2F0aW9uLCBhY3Rpb24gPSAiIiB9KSB7CiAgY29uc3QgZWxlbWVudCA9IGF3YWl0IHJvdXRlci5yZXNvbHZlKGxvY2F0aW9uLnBhdGhuYW1lKTsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgicm9vdCIpLnJlcGxhY2VDaGlsZHJlbihlbGVtZW50KTsKfQoKaGFuZGxlUm91dGUoeyBsb2NhdGlvbjogd2luZG93LmxvY2F0aW9uIH0pOwo=", self.location).toString().replace("file://", "");
+  const { default: n } = await import("https://tfl.dev/@truffle/ui@~0.1.0/components/theme/theme-template.ts"), o = process.env.NODE_ENV === "production" ? "/client-entry.js" : new URL("data:video/mp2t;base64,aW1wb3J0IGdsb2JhbENvbnRleHQgZnJvbSAiaHR0cHM6Ly90ZmwuZGV2L0B0cnVmZmxlL2dsb2JhbC1jb250ZXh0QF4xLjAuMC9pbmRleC50cyI7CmltcG9ydCB7IHNldENvbmZpZyB9IGZyb20gImh0dHBzOi8vdGZsLmRldi9AdHJ1ZmZsZS9jb25maWdAXjEuMC4wL2luZGV4LnRzIjsKaW1wb3J0IGhpc3RvcnkgZnJvbSAiaHR0cHM6Ly9ucG0udGZsLmRldi9oaXN0b3J5QDUvYnJvd3NlciI7CmltcG9ydCBVbml2ZXJzYWxSb3V0ZXIgZnJvbSAiaHR0cHM6Ly9ucG0udGZsLmRldi91bml2ZXJzYWwtcm91dGVyQDkiOwoKaW1wb3J0IHsgYWRkUm91dGVBY3Rpb24gfSBmcm9tICIuL3JvdXRlci50cyI7Cgpjb25zdCB7IGNsaWVudENvbmZpZywgY2xpZW50Q29udGV4dCwgcm91dGVzIH0gPSB3aW5kb3cuX3RydWZmbGVJbml0aWFsRGF0YTsKCmdsb2JhbENvbnRleHQuc2V0R2xvYmFsVmFsdWUoY2xpZW50Q29udGV4dCB8fCB7fSk7CnNldENvbmZpZyhjbGllbnRDb25maWcgfHwge30pOwoKY29uc3Qgcm91dGVyID0gbmV3IFVuaXZlcnNhbFJvdXRlcihyb3V0ZXMubWFwKGFkZFJvdXRlQWN0aW9uKSk7CgpoaXN0b3J5Lmxpc3RlbihoYW5kbGVSb3V0ZSk7Cgphc3luYyBmdW5jdGlvbiBoYW5kbGVSb3V0ZSh7IGxvY2F0aW9uLCBhY3Rpb24gPSAiIiB9KSB7CiAgY29uc3QgZWxlbWVudCA9IGF3YWl0IHJvdXRlci5yZXNvbHZlKGxvY2F0aW9uLnBhdGhuYW1lKTsKICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgicm9vdCIpLnJlcGxhY2VDaGlsZHJlbihlbGVtZW50KTsKfQoKaGFuZGxlUm91dGUoeyBsb2NhdGlvbjogd2luZG93LmxvY2F0aW9uIH0pOwo=", self.location).toString().replace("file://", "");
   return `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -122,13 +122,13 @@ async function E(t, e) {
       <script async src="https://unpkg.com/construct-style-sheets-polyfill@3.1.0/dist/adoptedStyleSheets.js"><\/script>
     </head>
     <body>
-      ${o || ""}
+      ${n || ""}
       <div id="root">${a || ""}</div>
-      <script type="module" src="${n}"><\/script>
+      <script type="module" src="${o}"><\/script>
       <script>window._truffleInitialData = ${JSON.stringify(e || "{}")}<\/script>
     </body>
     </html>`;
 }
 export {
-  F as render
+  k as render
 };
