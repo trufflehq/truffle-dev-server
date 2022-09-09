@@ -70,12 +70,9 @@ function getNestedRoute({ route, routes, parentPath = "" }) {
     !path && type === "page"
   );
   if (hasIndexPage) {
-    console.log("hasIndex");
-
     const wildcardRouteIndex = nestedRoute.children.findIndex(({ path }) =>
       path === `/${WILDCARD_PATH}`
     );
-    console.log("wild", wildcardRouteIndex, nestedRoute.children);
 
     const hasWildcard = wildcardRouteIndex !== -1;
     if (hasWildcard) {

@@ -24,14 +24,6 @@ export async function getDomain(req) {
     .toPromise();
   const domain = domainResponse?.data?.domain;
   if (!domain) {
-    console.log(
-      "Missing domain",
-      req.headers,
-      serverEnv.HOST_OVERRIDE,
-      serverEnv.SPOROCARP_HOST,
-    );
-    console.log("req", req);
-
     throw new Error(`Domain not found: ${domainName}`);
   }
   return domain;
