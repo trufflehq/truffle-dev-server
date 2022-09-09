@@ -32,12 +32,19 @@ const GET_ROUTE_QUERY = gql`
 const EMPTY_UUID = "00000000-0000-0000-0000-000000000000";
 
 export async function getNestedRoutes({ domain }) {
-  const response = await getClient().query(GET_ROUTE_QUERY, {
+  const variables = {
     input: { packageVersionId: domain.packageVersionId },
-  }).toPromise();
+  };
+  const response = await getClient().query(GET_ROUTE_QUERY, variables)
+    .toPromise();
 
   if (!response.data.routeConnection) {
-    console.log("missing routeConnection", response);
+    console.log(
+      "missing routeConnection",
+      response,
+      GET_ROUTE_QUERY,
+      variables,
+    );
   }
 
   const routes = response.data.routeConnection.nodes;
