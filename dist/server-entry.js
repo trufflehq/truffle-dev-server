@@ -47,35 +47,35 @@ function v(t = "") {
 function p(t) {
   return `module-${v(t.moduleUrl)}`;
 }
-const l = process.env, u = "https://mycelium.staging.bio", S = {
-  IS_DEV_ENV: l.NODE_ENV !== "production",
-  IS_STAGING_ENV: !1,
-  IS_PROD_ENV: l.NODE_ENV === "production",
-  PUBLIC_API_URL: l.PUBLIC_MYCELIUM_API_URL || u,
-  API_URL: l.PUBLIC_MYCELIUM_API_URL || u,
-  HOST: l.SPOROCARP_HOST || "dev.sporocarp.dev"
+const i = process.env, u = "https://mycelium.staging.bio", S = {
+  IS_DEV_ENV: i.NODE_ENV !== "production",
+  IS_STAGING_ENV: i.NODE_ENV === "staging",
+  IS_PROD_ENV: i.NODE_ENV === "production",
+  PUBLIC_API_URL: i.PUBLIC_MYCELIUM_API_URL || u,
+  API_URL: i.PUBLIC_MYCELIUM_API_URL || u,
+  HOST: i.SPOROCARP_HOST || "dev.sporocarp.dev"
 }, w = {
-  PUBLIC_API_URL: l.PUBLIC_MYCELIUM_API_URL || u,
-  API_URL: l.MYCELIUM_API_URL || u
+  PUBLIC_API_URL: i.PUBLIC_MYCELIUM_API_URL || u,
+  API_URL: i.MYCELIUM_API_URL || u
 };
 async function N({ req: t, res: e, options: a, clientConfig: n }) {
-  const o = m.getStore(), { getDomain: r, getNestedRoutes: s } = await (l.NODE_ENV === "production" ? import("./setup.hosted.js") : import("./setup.local.js")), c = await r(t, a), i = {
+  const o = m.getStore(), { getDomain: r, getNestedRoutes: s } = await (i.NODE_ENV === "production" ? import("./setup.hosted.js") : import("./setup.local.js")), c = await r(t, a), l = {
     orgId: c == null ? void 0 : c.orgId,
     packageVersionId: c == null ? void 0 : c.packageVersionId,
     packageId: c == null ? void 0 : c.packageId
   };
-  Object.assign(o, i);
+  Object.assign(o, l);
   const d = await s({ domain: c });
   return {
     clientConfig: n,
     routes: d,
-    clientContext: i
+    clientContext: l
   };
 }
-const { templateRenderer: U, defaultRenderInfo: _, elementRenderer: H } = R();
+const { templateRenderer: E, defaultRenderInfo: _, elementRenderer: H } = R();
 m._PRIVATE_setInstance(new L());
 h(w);
-function k(t, e, a) {
+function O(t, e, a) {
   const n = t.originalUrl, o = { ssr: { req: t, res: e } };
   return n === "/.well-known/ping" ? "pong" : new Promise((r) => {
     m.run(o, async () => {
@@ -91,22 +91,22 @@ function k(t, e, a) {
       } catch (d) {
         console.error("Initial context error", d);
       }
-      let i = await E(n, c);
+      let l = await U(n, c);
       try {
-        const d = U.render(i, {
+        const d = E.render(l, {
           ..._
         });
-        i = "";
+        l = "";
         for (const C of d)
-          i += C;
-        r(i);
+          l += C;
+        r(l);
       } catch (d) {
-        console.error("Render error", d), r(i);
+        console.error("Render error", d), r(l);
       }
     });
   });
 }
-async function E(t, e) {
+async function U(t, e) {
   let a;
   try {
     a = await new Z(e.routes.map(f)).resolve(t);
@@ -130,5 +130,5 @@ async function E(t, e) {
     </html>`;
 }
 export {
-  k as render
+  O as render
 };
