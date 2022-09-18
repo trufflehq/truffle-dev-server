@@ -3,19 +3,19 @@ import R from "https://npm.tfl.dev/@microsoft/fast-ssr@1.0.0-beta.4";
 import m from "https://tfl.dev/@truffle/global-context@^1.0.0/index.ts";
 import Z from "https://npm.tfl.dev/universal-router@9";
 import { setConfig as h } from "https://tfl.dev/@truffle/config@^1.0.0/index.ts";
-import { AsyncLocalStorage as L } from "node:async_hooks";
+import { AsyncLocalStorage as G } from "node:async_hooks";
 import { setParams as I } from "https://tfl.dev/@truffle/router@^1.0.0/index.ts";
 var b, g;
-const y = typeof document > "u" || ((g = (b = globalThis == null ? void 0 : globalThis.process) == null ? void 0 : b.release) == null ? void 0 : g.name) === "node";
+const L = typeof document > "u" || ((g = (b = globalThis == null ? void 0 : globalThis.process) == null ? void 0 : b.release) == null ? void 0 : g.name) === "node";
 function f(t) {
   return {
     ...t,
     path: t.path === "/*" ? "" : t.path,
-    action: y ? V : G,
+    action: L ? S : y,
     children: t.path === "/*" ? [] : t.children.map(f)
   };
 }
-async function G(t) {
+async function y(t) {
   const { route: e, params: a } = t;
   I(a);
   const n = await t.next();
@@ -29,7 +29,7 @@ async function G(t) {
   }
   return n;
 }
-async function V(t) {
+async function S(t) {
   var s;
   const { route: e, params: a } = t;
   I(a);
@@ -41,39 +41,39 @@ async function V(t) {
   const r = await t.next();
   return r && (n += r), o && (n += `</${o.tagName}>`), n || null;
 }
-function v(t = "") {
+function V(t = "") {
   return (t.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g) || []).join("-").toLowerCase();
 }
 function p(t) {
-  return `module-${v(t.moduleUrl)}`;
+  return `module-${V(t.moduleUrl)}`;
 }
-const l = process.env, u = "https://mycelium.staging.bio", S = {
-  IS_DEV_ENV: l.NODE_ENV !== "production",
-  IS_STAGING_ENV: !1,
-  IS_PROD_ENV: l.NODE_ENV === "production",
-  PUBLIC_API_URL: l.PUBLIC_MYCELIUM_API_URL || u,
-  API_URL: l.PUBLIC_MYCELIUM_API_URL || u,
-  HOST: l.SPOROCARP_HOST || "dev.sporocarp.dev"
+const i = process.env, u = "https://mycelium.staging.bio", v = {
+  IS_DEV_ENV: i.NODE_ENV !== "production",
+  IS_STAGING_ENV: i.IS_STAGING === "1",
+  IS_PROD_ENV: i.NODE_ENV === "production",
+  PUBLIC_API_URL: i.PUBLIC_MYCELIUM_API_URL || u,
+  API_URL: i.PUBLIC_MYCELIUM_API_URL || u,
+  HOST: i.SPOROCARP_HOST || "dev.sporocarp.dev"
 }, w = {
-  PUBLIC_API_URL: l.PUBLIC_MYCELIUM_API_URL || u,
-  API_URL: l.MYCELIUM_API_URL || u
+  PUBLIC_API_URL: i.PUBLIC_MYCELIUM_API_URL || u,
+  API_URL: i.MYCELIUM_API_URL || u
 };
 async function N({ req: t, res: e, options: a, clientConfig: n }) {
-  const o = m.getStore(), { getDomain: r, getNestedRoutes: s } = await (l.NODE_ENV === "production" ? import("./setup.hosted.js") : import("./setup.local.js")), c = await r(t, a), i = {
+  const o = m.getStore(), { getDomain: r, getNestedRoutes: s } = await (i.NODE_ENV === "production" ? import("./setup.hosted.js") : import("./setup.local.js")), c = await r(t, a), l = {
     orgId: c == null ? void 0 : c.orgId,
     packageVersionId: c == null ? void 0 : c.packageVersionId,
     packageId: c == null ? void 0 : c.packageId
   };
-  Object.assign(o, i);
+  Object.assign(o, l);
   const d = await s({ domain: c });
   return {
     clientConfig: n,
     routes: d,
-    clientContext: i
+    clientContext: l
   };
 }
-const { templateRenderer: U, defaultRenderInfo: _, elementRenderer: H } = R();
-m._PRIVATE_setInstance(new L());
+const { templateRenderer: _, defaultRenderInfo: U, elementRenderer: H } = R();
+m._PRIVATE_setInstance(new G());
 h(w);
 function k(t, e, a) {
   const n = t.originalUrl, o = { ssr: { req: t, res: e } };
@@ -86,22 +86,22 @@ function k(t, e, a) {
           req: t,
           res: e,
           options: a,
-          clientConfig: S
+          clientConfig: v
         }), Object.assign(s, c);
       } catch (d) {
         console.error("Initial context error", d);
       }
-      let i = await E(n, c);
+      let l = await E(n, c);
       try {
-        const d = U.render(i, {
-          ..._
+        const d = _.render(l, {
+          ...U
         });
-        i = "";
+        l = "";
         for (const C of d)
-          i += C;
-        r(i);
+          l += C;
+        r(l);
       } catch (d) {
-        console.error("Render error", d), r(i);
+        console.error("Render error", d), r(l);
       }
     });
   });
