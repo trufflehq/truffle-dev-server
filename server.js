@@ -9,11 +9,11 @@ import vue from "@vitejs/plugin-vue";
 
 import { viteSassToCss } from "./src/utils/sass.js";
 const PORT = process.env.SPOROCARP_PORT || 8000;
-
+const isHostedEnv = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging"
 // truffle-cli passes in { packageVersion } (for getting org, etc... with setup.lcal)
 export async function startServer(options) {
   let vite;
-  if (process.env.NODE_ENV !== "production") {
+  if (!isHostedEnv) {
     vite = await createViteServer({
       appType: "custom",
       logLevel: "silent",
@@ -30,7 +30,7 @@ export async function startServer(options) {
       ],
       ssr: { external: ["glob"] }, // errors w/o this
       server: {
-        hmr: process.env.NODE_ENV !== "production",
+        hmr: !isHostedEnv,
         middlewareMode: true,
         // FIXME: I think we might be able to disable when this package is installed via hosted github
         // (vs installed from local)
@@ -41,7 +41,7 @@ export async function startServer(options) {
 
   const app = express();
 
-  if (process.env.NODE_ENV === "production") {
+  if (isHostedEnv) {
     const dir = new URL("./dist", import.meta.url)
       .toString()
       .replace("file://", "");
@@ -56,7 +56,7 @@ export async function startServer(options) {
 
     try {
       let render;
-      if (process.env.NODE_ENV === "production") {
+      if (isHostedEnv) {
         ({ render } = await import("./dist/server-entry.js"));
       } else {
         // vite doesn't like file urls :(
@@ -67,7 +67,7 @@ export async function startServer(options) {
         ({ render } = await vite.ssrLoadModule(entry));
       }
       const appHtml = await render(req, res, options);
-      const html = process.env.NODE_ENV === "production"
+      const html = isHostedEnv
         ? appHtml
         : await vite.transformIndexHtml(url, appHtml);
       res.status(200).set({ "Content-Type": "text/html" }).end(html);

@@ -25,11 +25,11 @@ export async function getInitialClientData(
   { req, res, options, clientConfig },
 ) {
   const context = globalContext.getStore();
+  const isHostedEnv = process.env.NODE_ENV === "production" ||
+    process.env.NODE_ENV === "staging";
 
   const { getDomain, getNestedRoutes } = await import(
-    serverEnv.NODE_ENV === "production"
-      ? "./setup.hosted.ts"
-      : "./setup.local.ts"
+    isHostedEnv ? "./setup.hosted.ts" : "./setup.local.ts"
   );
   const domain = await getDomain(req, options);
 

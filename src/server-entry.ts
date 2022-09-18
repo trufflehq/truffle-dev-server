@@ -90,8 +90,10 @@ async function getHtmlStr(url: string, initialClientData) {
   const { default: themeTemplate } = await import(
     "https://tfl.dev/@truffle/ui@~0.1.0/components/theme/theme-template.ts"
   );
+  const isHostedEnv = process.env.NODE_ENV === "production" ||
+    process.env.NODE_ENV === "staging";
 
-  const clientEntrySrc = process.env.NODE_ENV === "production"
+  const clientEntrySrc = isHostedEnv
     ? "/client-entry.js"
     : new URL("./client-entry.ts", import.meta.url)
       .toString()
