@@ -7,7 +7,7 @@ const WILDCARD_PATH_NOT_EMPTY = "(.+)";
 // eg componentInstance and component loads that cache based on the array
 const GET_ROUTE_QUERY = gql`
   query RouteConnectionWithExtras($input: RouteConnectionInput!) {
-    routeConnection(input: $input) {
+    routeConnection(input: $input, first: 100) {
       nodes {
         id # req for cache categoryFn
         parentId
