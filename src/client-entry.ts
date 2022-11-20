@@ -5,6 +5,8 @@ import UniversalRouter from "https://npm.tfl.dev/universal-router@9";
 
 import { addRouteAction } from "./router.ts";
 
+// TODO: if _truffleInitialData.routes is empty (ssr failed on an import)
+// we should run some variation of getInitialClientData here to get the routes
 const { clientConfig, clientContext, routes } = window._truffleInitialData;
 
 globalContext.setGlobalValue(clientContext || {});

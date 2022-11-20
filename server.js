@@ -60,10 +60,11 @@ export async function startServer(options) {
         ({ render } = await import("./dist/server-entry.js"));
       } else {
         // vite doesn't like file urls :(
-        const entry = (await import.meta.resolve("./src/server-entry.ts")).toString().replace(
-          "file://",
-          "",
-        );
+        const entry = (await import.meta.resolve("./src/server-entry.ts"))
+          .toString().replace(
+            "file://",
+            "",
+          );
         ({ render } = await vite.ssrLoadModule(entry));
       }
       const appHtml = await render(req, res, options);
@@ -74,7 +75,7 @@ export async function startServer(options) {
     } catch (e) {
       // If an error is caught, let Vite fix the stracktrace so it maps back to
       // your actual source code.
-      vite.ssrFixStacktrace(e);
+      vite?.ssrFixStacktrace(e);
       next(e);
     }
   });
@@ -83,9 +84,10 @@ export async function startServer(options) {
 }
 
 function listenForExit() {
-  ["exit", "SIGINT", "SIGUSR1", "SIGUSR2", "uncaughtException", "SIGTERM"].forEach((eventType) => {
-    process.on(eventType, onExit.bind(null, { eventType }));
-  });
+  ["exit", "SIGINT", "SIGUSR1", "SIGUSR2", "uncaughtException", "SIGTERM"]
+    .forEach((eventType) => {
+      process.on(eventType, onExit.bind(null, { eventType }));
+    });
 }
 
 function onExit({ eventType }, err) {
@@ -95,4 +97,8 @@ function onExit({ eventType }, err) {
   process.exit();
 }
 
-export { isSassJsFile, replaceSassLiteralWithCssLiteral, viteSassToCss } from './src/utils/sass.js'
+export {
+  isSassJsFile,
+  replaceSassLiteralWithCssLiteral,
+  viteSassToCss,
+} from "./src/utils/sass.js";

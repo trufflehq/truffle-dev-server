@@ -19,10 +19,18 @@ import { clientConfig, getInitialClientData, serverConfig } from "./setup.ts";
 
 const { templateRenderer, defaultRenderInfo, elementRenderer } = fastSSR();
 
+const IMPORT_ERROR_CLEAR_INTERVAL_MS = 60 * 1000; // 1 min
+const MIN_IMPORT_ERROR_COUNT_FOR_UNHEALTHY = 100;
+
 // url imports can't import non-url imports, so we have to pass this in...
 globalContext._PRIVATE_setInstance(new AsyncLocalStorage());
 
 setConfig(serverConfig);
+
+let importErrorCount = 0;
+setInterval(() => {
+  importErrorCount = 0;
+}, IMPORT_ERROR_CLEAR_INTERVAL_MS);
 
 export function render(req, res, options) {
   const url = req.originalUrl;
@@ -31,6 +39,15 @@ export function render(req, res, options) {
   // k8s probe
   if (url === "/.well-known/ping") {
     return "pong";
+  } else if (url === "/healthcheck") {
+    // sometimes tds/sporocarp gets in a bad state where every import
+    // returns ERR_NETWORK_IMPORT_DISALLOWED, import of undefined is not supported.
+    // i think this is bc nodejs is caching bad responses? so if first import of url when
+    // pod spins up breaks (eg esm.sh is down), it won't fix itself when esm.sh is back up
+    if (importErrorCount > MIN_IMPORT_ERROR_COUNT_FOR_UNHEALTHY) {
+      throw new Error("Imports are in a bad state");
+    }
+    return "ok";
   }
 
   return new Promise((resolve) => {
@@ -48,6 +65,9 @@ export function render(req, res, options) {
         });
         Object.assign(context, initialClientData);
       } catch (err) {
+        if (err.code === "ERR_NETWORK_IMPORT_DISALLOWED") {
+          importErrorCount += 1;
+        }
         console.error("Initial context error", err);
       }
 
