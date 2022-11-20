@@ -39,7 +39,7 @@ export function render(req, res, options) {
   // k8s probe
   if (url === "/.well-known/ping") {
     return "pong";
-  } else if (url === "/healthcheck") {
+  } else if (url === "/.well-known/healthcheck") {
     // sometimes tds/sporocarp gets in a bad state where every import
     // returns ERR_NETWORK_IMPORT_DISALLOWED, import of undefined is not supported.
     // i think this is bc nodejs is caching bad responses? so if first import of url when

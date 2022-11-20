@@ -83,7 +83,7 @@ function M(t, n, a) {
   const e = t.originalUrl, o = { ssr: { req: t, res: n } };
   if (e === "/.well-known/ping")
     return "pong";
-  if (e === "/healthcheck") {
+  if (e === "/.well-known/healthcheck") {
     if (b > W)
       throw new Error("Imports are in a bad state");
     return "ok";
