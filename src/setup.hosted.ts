@@ -4,8 +4,8 @@ import { getClient, gql } from "https://tfl.dev/@truffle/api@^0.1.0/client.ts";
 // vite does it bc normally vite builds client code. this is server code
 const serverEnv = process.env;
 
-const GET_DOMAIN_QUERY = gql`query DomainByDomainName($domainName: String) {
-  domain(domainName: $domainName) {
+const GET_DOMAIN_QUERY = gql`query DomainByDomainName($input: DomainInput) {
+  domain(input: $input) {
     orgId
     packageVersionId
     packageId
@@ -20,7 +20,7 @@ export async function getDomain(req) {
 
   const client = getClient();
   const domainResponse = await client
-    .query(GET_DOMAIN_QUERY, { domainName, _skipAuth: true })
+    .query(GET_DOMAIN_QUERY, { input: { domainName }, _skipAuth: true })
     .toPromise();
   const domain = domainResponse?.data?.domain;
   if (!domain) {
