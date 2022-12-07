@@ -1,4 +1,4 @@
-import { getClient, gql } from "https://tfl.dev/@truffle/api@^0.1.0/client.ts";
+import { getClient, gql } from "https://tfl.dev/@truffle/api@^0.2.0/client.ts";
 
 // req for vite build to not statically replace.
 // vite does it bc normally vite builds client code. this is server code

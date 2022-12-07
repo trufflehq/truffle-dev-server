@@ -1,4 +1,4 @@
-import { gql as I, getClient as f } from "https://tfl.dev/@truffle/api@^0.1.0/client.ts";
+import { gql as I, getClient as f } from "https://tfl.dev/@truffle/api@^0.2.0/client.ts";
 const d = "(.*)", y = "(.+)", m = I`
   query RouteConnectionWithExtras($input: RouteConnectionInput!) {
     routeConnection(input: $input, first: 100) {
