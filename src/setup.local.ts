@@ -1,17 +1,8 @@
-import { getClient, gql } from "https://tfl.dev/@truffle/api@^0.2.0/client.ts";
+import { getDomainModel } from "./utils/domain.ts";
 
-const GET_DOMAIN_QUERY = gql
-  `query DomainGetConnection($input: DomainConnectionInput) {
-  domainConnection(input: $input) {
-    nodes {
-      id
-      domainName
-      packageVersionId
-      packageId
-      orgId
-    }
-  }
-}`;
+// req for vite build to not statically replace.
+// vite does it bc normally vite builds client code. this is server code
+const serverEnv = process.env;
 
 export async function getDomain(req, { packageVersion }) {
   if (!packageVersion) {
@@ -19,12 +10,10 @@ export async function getDomain(req, { packageVersion }) {
     return null;
   }
 
-  const query = GET_DOMAIN_QUERY;
-  const variables = { input: { packageVersionId: packageVersion.id } };
-
-  const response = await getClient().query(query, variables).toPromise();
-
-  const domain = response.data?.domainConnection?.nodes[0];
+  const domainProps = serverEnv.HOST_OVERRIDE
+    ? { domainName: serverEnv.HOST_OVERRIDE }
+    : { packageVersionId: packageVersion.id };
+  const domain = await getDomainModel(domainProps);
 
   if (!domain) {
     console.warn(

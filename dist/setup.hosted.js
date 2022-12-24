@@ -1,5 +1,6 @@
-import { gql as I, getClient as f } from "https://tfl.dev/@truffle/api@^0.2.0/client.ts";
-const d = "(.*)", y = "(.+)", m = I`
+import { g as I } from "./domain.js";
+import { gql as P, getClient as y } from "https://tfl.dev/@truffle/api@^0.2.0/client.ts";
+const c = "(.*)", C = "(.+)", l = P`
   query RouteConnectionWithExtras($input: RouteConnectionInput!) {
     routeConnection(input: $input, first: 100) {
       nodes {
@@ -23,44 +24,36 @@ const d = "(.*)", y = "(.+)", m = I`
       }
     }
   }`, E = "00000000-0000-0000-0000-000000000000";
-async function C({ domain: n }) {
-  const o = {
-    input: { packageVersionId: n.packageVersionId }
-  }, r = await f().query(m, o).toPromise();
-  r.data.routeConnection || console.log("missing routeConnection", r, m, o);
-  const e = r.data.routeConnection.nodes;
-  return e.filter(({ parentId: s }) => s === E).map((s) => R({ route: s, routes: e }));
+async function _({ domain: t }) {
+  const n = {
+    input: { packageVersionId: t.packageVersionId }
+  }, o = await y().query(l, n).toPromise();
+  o.data.routeConnection || console.log("missing routeConnection", o, l, n);
+  const r = o.data.routeConnection.nodes;
+  return r.filter(({ parentId: s }) => s === E).map((s) => f({ route: s, routes: r }));
 }
-function R({ route: n, routes: o, parentPath: r = "" }) {
-  var p, u, h, l;
-  const e = ((p = n.pathWithVariables) == null ? void 0 : p.replace(/\/\*/g, `/${d}`)) || "", a = {
-    path: (e == null ? void 0 : e.replace(r, "")) || "",
-    type: n.type,
-    moduleUrl: (l = (h = (u = n.componentInstance) == null ? void 0 : u.component) == null ? void 0 : h.module) == null ? void 0 : l.url,
-    children: o.filter(({ parentId: t }) => t === n.id).map((t) => R({ route: t, routes: o, parentPath: e })).sort((t, c) => t.path === `/${d}` ? 2 : t.path ? -1 : 1)
+function f({ route: t, routes: n, parentPath: o = "" }) {
+  var d, p, h, u;
+  const r = ((d = t.pathWithVariables) == null ? void 0 : d.replace(/\/\*/g, `/${c}`)) || "", a = {
+    path: (r == null ? void 0 : r.replace(o, "")) || "",
+    type: t.type,
+    moduleUrl: (u = (h = (p = t.componentInstance) == null ? void 0 : p.component) == null ? void 0 : h.module) == null ? void 0 : u.url,
+    children: n.filter(({ parentId: e }) => e === t.id).map((e) => f({ route: e, routes: n, parentPath: r })).sort((e, i) => e.path === `/${c}` ? 2 : e.path ? -1 : 1)
   };
-  if (a.children.find(({ path: t, type: c }) => !t && c === "page")) {
-    const t = a.children.findIndex(({ path: P }) => P === `/${d}`);
-    t !== -1 && (a.children[t].path = `/${y}`);
+  if (a.children.find(({ path: e, type: i }) => !e && i === "page")) {
+    const e = a.children.findIndex(({ path: R }) => R === `/${c}`);
+    e !== -1 && (a.children[e].path = `/${C}`);
   }
   return a;
 }
-const g = process.env, _ = I`query DomainByDomainName($domainName: String) {
-  domain(domainName: $domainName) {
-    orgId
-    packageVersionId
-    packageId
-    org { slug }
-  }
-}`;
-async function T(n) {
-  var a;
-  const o = g.HOST_OVERRIDE || n.headers["x-forwarded-host"] || n.headers.host || g.SPOROCARP_HOST, e = await f().query(_, { domainName: o, _skipAuth: !0 }).toPromise(), i = (a = e == null ? void 0 : e.data) == null ? void 0 : a.domain;
-  if (!i)
-    throw new Error(`Domain not found: ${o}`);
-  return i;
+const m = process.env;
+async function x(t) {
+  const n = m.HOST_OVERRIDE || t.headers["x-forwarded-host"] || t.headers.host || m.SPOROCARP_HOST, o = await I({ domainName: n });
+  if (!o)
+    throw new Error(`Domain not found: ${n}`);
+  return o;
 }
 export {
-  T as getDomain,
-  C as getNestedRoutes
+  x as getDomain,
+  _ as getNestedRoutes
 };
