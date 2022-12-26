@@ -1397,7 +1397,7 @@ async function Ve(t, { packageVersion: e }) {
   if (!e)
     return console.warn("PackageVersion not found, you may need to deploy first"), null;
   const r = At.HOST_OVERRIDE ? { domainName: At.HOST_OVERRIDE } : { packageVersionId: e.id }, n = await Yt(r);
-  return n || console.warn("Domain not found:", e.id, response.error), n;
+  return n || console.warn("Domain not found:", e.id), n;
 }
 export {
   Ve as getDomain,

@@ -19,7 +19,6 @@ export async function getDomain(req, { packageVersion }) {
     console.warn(
       "Domain not found:",
       packageVersion.id,
-      response.error,
     );
   }
 
